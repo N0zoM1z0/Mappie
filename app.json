@@ -1,25 +1,46 @@
 {
   "expo": {
-    "name": "mappie-expo.XE1Pqz",
-    "slug": "mappie-expo.XE1Pqz",
-    "version": "1.0.0",
+    "name": "Mappie",
+    "slug": "mappie",
+    "scheme": "mappie",
+    "version": "0.1.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/mappie-icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#07110e",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.n0zom1z0.mappie",
+      "infoPlist": {
+        "UIBackgroundModes": ["location"]
+      }
     },
     "android": {
+      "package": "com.n0zom1z0.mappie",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundColor": "#07110e",
+        "foregroundImage": "./assets/mappie-icon.png"
       },
       "predictiveBackGestureEnabled": false
     },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Mappie uses your location to draw the paths you choose to explore.",
+          "isIosBackgroundLocationEnabled": true,
+          "isAndroidBackgroundLocationEnabled": true
+        }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
+      ]
+    ],
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/mappie-icon.png"
     }
   }
 }

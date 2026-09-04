@@ -1,22 +1,47 @@
 {
-  "name": "mappie-expo.xe1pqz",
-  "version": "1.0.0",
+  "name": "mappie",
+  "version": "0.1.0",
+  "description": "A private-first personal map that only exists where you have explored.",
+  "license": "MIT",
   "main": "index.ts",
   "dependencies": {
+    "@expo/metro-runtime": "~57.0.15",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "~57.0.20",
+    "expo-document-picker": "~57.0.1",
+    "expo-file-system": "~57.0.6",
+    "expo-location": "~57.0.16",
     "expo-status-bar": "~57.0.1",
+    "expo-task-manager": "~57.0.16",
+    "fast-xml-parser": "^5.11.1",
+    "lucide-react-native": "^1.41.0",
     "react": "19.2.3",
-    "react-native": "0.86.3"
+    "react-dom": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-svg": "15.15.4",
+    "react-native-web": "^0.21.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@types/react": "~19.2.2",
-    "typescript": "~6.0.3"
+    "@vitest/coverage-v8": "^4.1.11",
+    "prettier": "^3.9.6",
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.11"
   },
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "private": true
 }

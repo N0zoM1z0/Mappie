@@ -39,3 +39,11 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# private product notes and source conversations
+/preparations/
+
+# test output
+/coverage/
+/playwright-report/
+/test-results/
