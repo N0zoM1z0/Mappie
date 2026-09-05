@@ -96,6 +96,8 @@ The `src/core` modules have no React Native imports. This keeps parsing, filteri
 
 See [Architecture](docs/architecture.md) for lifecycle details and the planned road-graph model.
 
+See the [Firefox replay performance case study](docs/performance.md) for the original session-30 slowdown, root-cause analysis, measured before/after results, regression strategy, and reproducible profiling command.
+
 ## Privacy model
 
 - No account, analytics, server, advertising SDK, or remote map provider

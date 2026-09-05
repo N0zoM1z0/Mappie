@@ -36,6 +36,7 @@
     "android": "expo start --android",
     "fixtures:refresh": "node scripts/import-public-traces.mjs",
     "ios": "expo start --ios",
+    "profile:firefox": "node scripts/profile-firefox.mjs",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

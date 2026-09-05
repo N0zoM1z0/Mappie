@@ -119,3 +119,6 @@ SVG path instead of creating one React/SVG node per inferred edge. The demo also
 caches its fixed projection viewport and keeps the completed network static
 while replaying the current raw survey. Reconstruction runs once when a session
 is selected and the new edges are committed when its replay completes.
+
+The original Firefox bottleneck and the measured effect of this design are
+recorded in the [replay performance case study](performance.md).
