@@ -8,7 +8,7 @@
 
 [Open the live web app](https://mappie-c70.pages.dev)
 
-When I first played _Rewrite_, Mappie was one of those small ideas that stayed with me: a map that begins completely empty and comes into focus only because you actually went somewhere. I kept thinking it would be fun to make a real version someday, so this is that little project.
+When I first played [_Rewrite_](https://store.steampowered.com/app/1680000/rewrite/), [Mappie](https://rewrite.fandom.com/wiki/Mappie) was one of those small ideas that stayed with me: a map that begins completely empty and comes into focus only because you actually went somewhere. I kept thinking it would be fun to make a real version someday, so this is that little project.
 
 This Mappie is a personal cartography experiment built around the same feeling. You begin with a blank field. Each walk reveals a little more of the place around you: familiar paths line up, noisy GPS traces settle into shared routes, and a turn into somewhere new becomes another branch. Walk through the same area often enough and a rough, personal map slowly appears.
 
