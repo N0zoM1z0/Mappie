@@ -1,34 +1,43 @@
 # Data attribution
 
-## OpenStreetMap GPS fixtures
+## Cambridge reconstruction scenario
 
-The replay gallery contains six traces downloaded from OpenStreetMap pages that
-were explicitly marked `PUBLIC` when checked on 2026-09-05.
+The demo contains 70 independent GPS sessions from the same Cambridge, United
+Kingdom bounding box (`0.111-0.126 E`, `52.200-52.209 N`). They were selected
+from 141 linked traces returned by the official OpenStreetMap GPS trackpoints
+API. Obvious bus, car, train, non-GPS line datasets, duplicate uploads, and
+traces with negligible local geometry were excluded.
 
-| Fixture                           | Activity |                                                                   OSM trace | Source points | Retained points |
-| --------------------------------- | -------- | --------------------------------------------------------------------------: | ------------: | --------------: |
-| `osm-rochdale-canal-walk.json`    | Walk     |  [11982156](https://www.openstreetmap.org/user/SomeoneElse/traces/11982156) |            33 |              33 |
-| `osm-arctic-walking-loop.json`    | Walk     |       [12425703](https://www.openstreetmap.org/user/SaPeKa/traces/12425703) |         3,867 |             240 |
-| `osm-forest-hiking-traverse.json` | Hike     |      [12437049](https://www.openstreetmap.org/user/propivo/traces/12437049) |         6,221 |             240 |
-| `osm-branched-morning-run.json`   | Run      | [12328611](https://www.openstreetmap.org/user/Naya%20Kabir/traces/12328611) |        10,740 |             240 |
-| `osm-urban-running-loop.json`     | Run      |      [12440920](https://www.openstreetmap.org/user/propivo/traces/12440920) |         4,318 |             240 |
-| `osm-mountain-bike-loop.json`     | Ride     |      [12018098](https://www.openstreetmap.org/user/Extills/traces/12018098) |         2,188 |             240 |
+Every selected source page was publicly listed as `Identifiable` when checked
+on 2026-09-05. The canonical list of trace IDs, contributors, display names,
+and activity labels lives in
+[`scripts/cambridge-traces.mjs`](../scripts/cambridge-traces.mjs). Every session
+inside [`fixtures/osm-cambridge-sessions.json`](../fixtures/osm-cambridge-sessions.json)
+also retains its direct OpenStreetMap source URL.
 
-The importer retains ordered track points only. It excludes unrelated waypoints
-and annotations, replaces source timestamps with fixed synthetic one-second
-intervals, and evenly samples long traces to keep mobile replay bounded. Run
-`npm run fixtures:refresh` to reproduce the checked-in JSON from the source GPX
-files.
+| Measure                         |   Value |
+| ------------------------------- | ------: |
+| Selected sessions               |      70 |
+| Walking sessions                |      14 |
+| Running sessions                |       5 |
+| Riding sessions                 |      16 |
+| General mapping/survey sessions |      35 |
+| Original source points          | 567,637 |
+| Points inside the shared area   |  34,024 |
+| Retained replay points          |  14,510 |
+
+The importer retains ordered track points only. It excludes unrelated waypoints,
+crops each source to the shared test area, preserves segment breaks when a trace
+leaves and re-enters the area, replaces original timestamps with synthetic
+one-second intervals, and samples each session to at most 300 points. Gzip and
+bzip2 source archives are decoded before structured GPX parsing. Run
+`npm run fixtures:refresh` to reproduce the checked-in scenario.
 
 Attribution: (c) OpenStreetMap contributors. The fixture data is provided under
 the [Open Data Commons Open Database License 1.0](https://opendatacommons.org/licenses/odbl/1-0/).
 See the [OpenStreetMap copyright notice](https://www.openstreetmap.org/copyright).
 
-The optional discovery names and descriptions in `src/data/demoTrack.ts` are
-fictional interaction samples. They do not identify real people or claim that a
-real point of interest exists at the marker coordinate.
-
-The fixtures are data, not application source code. The repository's MIT
-license applies to source code and original project assets; it does not replace
-the fixtures' ODbL terms. No OpenStreetMap basemap or map tiles are distributed
-or requested by the application.
+The fixture is data, not application source code. The repository's MIT license
+applies to source code and original project assets; it does not replace the
+fixture's ODbL terms. No OpenStreetMap basemap or map tiles are distributed or
+requested by the application.

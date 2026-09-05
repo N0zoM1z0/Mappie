@@ -1,31 +1,41 @@
 import { expect, test } from "@playwright/test";
 
-test("explores public traces and records optional discoveries", async ({
+test("builds one unknown map from repeated public sessions", async ({
   page,
 }) => {
   await page.goto("/");
   await expect(page.getByText("Mappie", { exact: true })).toBeVisible();
-  await expect(page.getByText(/OSM TRACE 11982156/)).toBeVisible();
+  await expect(page.getByRole("tab", { name: "RECONSTRUCTION" })).toBeVisible();
+  await expect(page.getByText(/OSM 10081548/)).toBeVisible();
   await expect(page.locator("svg path").first()).toBeVisible({
     timeout: 10_000,
   });
-  const discovery = page.getByRole("button", { name: /Open discovery:/ });
-  await expect(discovery).toBeVisible({ timeout: 10_000 });
-  await discovery.click();
-  await expect(page.getByText("1/3", { exact: true })).toBeVisible();
-  await expect(page.getByText(/MEMORY ADDED/)).toBeVisible();
+  await page.getByRole("button", { name: "Zoom in" }).click();
+  await expect(page.locator("svg g").first()).toHaveAttribute(
+    "transform",
+    /scale\(1\.35\)/,
+  );
+  await page.waitForTimeout(500);
+  await expect(page.locator("svg g").first()).toHaveAttribute(
+    "transform",
+    /scale\(1\.35\)/,
+  );
+  await expect(page.getByText("SESSIONS", { exact: true })).toBeVisible();
+  await expect(page.getByText("CONF.", { exact: true })).toBeVisible();
 
-  await page.getByRole("button", { name: "Play public trace replay" }).click();
-  const person = page.getByRole("button", {
-    name: "Open discovery: Passing mapper",
-  });
-  await expect(person).toBeVisible({ timeout: 10_000 });
-  await person.click();
-  await expect(page.getByText("2/3", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Next exploration session" }).click();
+  await expect(page.getByText(/SESSION 02 \/ 70/)).toBeVisible();
+  await expect(page.getByText(/OSM 10082156/)).toBeVisible();
 
-  await page.getByRole("button", { name: "Next public trace" }).click();
-  await expect(page.getByText(/OSM TRACE 12425703/)).toBeVisible();
-  await expect(page.getByText(/ARCTIC WALKING LOOP/)).toBeVisible();
+  await page.getByRole("tab", { name: "RAW layer" }).click();
+  await expect(
+    page.getByRole("tab", { name: "RAW layer selected" }),
+  ).toBeVisible();
+  await page.getByRole("tab", { name: "MAP layer" }).click();
+  await page
+    .getByRole("button", { name: "Forward ten exploration sessions" })
+    .click();
+  await expect(page.getByText(/SESSION 12 \/ 70/)).toBeVisible();
 
   const overflow = await page.evaluate(
     () =>

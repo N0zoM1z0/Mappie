@@ -1,6 +1,6 @@
 {
   "name": "mappie",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A private-first personal map that only exists where you have explored.",
   "license": "MIT",
   "main": "index.ts",
@@ -27,6 +27,7 @@
     "@types/react": "~19.2.2",
     "@vitest/coverage-v8": "^4.1.11",
     "prettier": "^3.9.6",
+    "seek-bzip": "^2.0.0",
     "typescript": "~6.0.3",
     "vitest": "^4.1.11"
   },

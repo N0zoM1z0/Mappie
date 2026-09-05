@@ -1,6 +1,6 @@
 # Architecture
 
-Mappie 0.1 separates sensor collection from personal cartography. The only platform-specific layer acquires location observations; every transformation after that is ordinary TypeScript.
+Mappie 0.2 separates sensor collection from personal cartography. The only platform-specific layer acquires location observations; every transformation after that is ordinary TypeScript.
 
 ## Runtime flow
 
@@ -19,6 +19,12 @@ LocationObject -> TrackPoint          XML -> TrackPoint[]
               versioned local archive
                          |
                          v
+       simplify -> resample -> spatial snap
+                         |
+                         v
+               observed edge graph
+                         |
+                         v
                  metric projection
                          |
                          v
@@ -29,7 +35,9 @@ LocationObject -> TrackPoint          XML -> TrackPoint[]
 
 `src/core`
 
-Pure geospatial and interchange logic. It parses GPX, measures Haversine distance, rejects bad observations, splits interrupted sessions, and projects latitude/longitude into a fitted local metric plane. These modules are covered by Vitest and can run without Expo.
+Pure geospatial and interchange logic. It parses GPX, measures Haversine distance, rejects bad observations, splits interrupted sessions, reconstructs a visited edge graph, and projects latitude/longitude into a fitted local metric plane. These modules are covered by Vitest and can run without Expo.
+
+`reconstruction.ts` is the current baseline map builder. It applies Ramer-Douglas-Peucker simplification, resamples long segments at a fixed metric interval, and snaps observations within a bounded radius into shared nodes. Edges record the first and last session that observed them, distinct-session visit counts, and per-session new versus revisited distance. A length-weighted confidence score rises across the first three independent observations of an edge.
 
 `src/services`
 
@@ -45,7 +53,7 @@ The code-native cartography surface and controls. `MapCanvas` receives tracks ra
 
 `src/data`
 
-The isolated public replay gallery. Each route binds an attributed OSM fixture to fictional proximity markers used to exercise `?`, person, `!`, and Memory states without claiming real-world POIs. Demo discoveries are session-only and are never written into the private archive.
+The isolated public reconstruction scenario. Seventy attributed OSM GPS sessions are cropped to the same fixed Cambridge bounding box, retaining genuine overlap, branches, loops, and positioning drift. The fixtures are never written into the private archive.
 
 ## Track schema
 
@@ -56,6 +64,7 @@ interface TrackPoint {
   timestamp: number;
   accuracy?: number;
   elevation?: number;
+  segmentStart?: boolean;
 }
 
 interface Track {
@@ -96,11 +105,11 @@ The foreground watcher remains active while the background task is registered so
 
 ## Next storage model
 
-Map matching will change the durable model from only raw trajectories to two related stores:
+Production map matching will change the durable model from only raw trajectories to two related stores:
 
 ```text
 private_observations(track_id, time, lat, lon, accuracy)
-explored_edges(osm_edge_id, first_seen, last_seen, visit_count)
+inferred_edges(edge_id, from_node, to_node, first_seen, last_seen, visit_count)
 ```
 
-Rendering can then depend on `explored_edges`, while users may choose to delete precise raw observations. Discovery entities will attach to explored edge IDs or privacy-reduced spatial cells instead of silently leaking a full location history.
+Rendering can then depend on `inferred_edges`, while users may choose to delete precise raw observations. The current in-memory graph is rebuilt deterministically and is not yet persisted.

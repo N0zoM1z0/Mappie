@@ -29,32 +29,27 @@ characters.
 ## What Mappie preserves
 
 - Physical movement is the source of map knowledge.
-- The known line grows while the trace is replayed or recorded.
-- A visible `!` gives the expedition a main direction.
-- Optional `?` and person signals appear only after the path gets close.
-- Opening a signal changes it to a completed state and increments Memory.
-- A player can ignore optional signals and continue toward the target.
+- The known network grows while a trace is replayed or recorded.
+- Repeated observations consolidate noisy lines into shared map edges.
+- New entrances and branches extend the boundary of the known place.
+- Unwalked roads remain absent even when public map data exists for the area.
 
 ## Deliberate adaptation
 
 The game already knows and displays a conventional illustrated town map. This
 project starts from a blank canvas because its real-world premise is stricter:
-the user should not receive road knowledge they have not earned. It therefore
-copies the exploration loop, not the proprietary presentation.
-
-A desktop cursor can sweep for hidden events, but an iPhone has no hover state.
-The mobile equivalent is proximity reveal: a signal becomes tappable only when
-the growing GPS trace reaches its neighborhood. The included events are clearly
-fictional demo content attached to public traces; future personal events will be
-local and user-owned.
+the user should not receive road knowledge they have not earned. It implements
+the fictional software premise, not the game's plot-navigation layer. Story
+targets, hidden events, characters, quests, and Memory collection are therefore
+deliberately outside the product.
 
 ## Fidelity assessment
 
-Version 0.1 originally reproduced only the map-growth premise. The current demo
-also reproduces the target-versus-detour decision and the discovery-to-Memory
-feedback loop. It is now directionally faithful to what makes Mappie interesting,
-but it is not a complete clone.
+Version 0.2 corrects an earlier product mistake: reproducing `?`, `!`, people,
+and Memory made the prototype resemble the minigame while distracting from the
+useful real-world idea. The current demo instead asks whether multiple visits to
+one unknown area can progressively recover a coherent local network.
 
-The largest missing pieces are durable discoveries on personal recordings,
-quest dependencies, people/POI authoring, and road-graph map matching. Those
-belong after the GPS and replay foundation is reliable on a physical iPhone.
+The largest missing pieces are durable graph storage, probabilistic map
+matching, intersection cleanup, confidence calibration, and validation against
+physical iPhone recordings. Those are the next steps for the actual product.

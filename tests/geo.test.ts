@@ -24,8 +24,8 @@ const point = (
 describe("geospatial core", () => {
   it("computes a realistic distance for the public walking trace", () => {
     const distance = trackDistance(demoTrack.points);
-    expect(distance).toBeGreaterThan(250);
-    expect(distance).toBeLessThan(500);
+    expect(distance).toBeGreaterThan(500);
+    expect(distance).toBeLessThan(5_000);
   });
 
   it("filters invalid, inaccurate, stationary, and impossible points", () => {

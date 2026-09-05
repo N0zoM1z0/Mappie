@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   PanResponder,
-  Pressable,
   type GestureResponderEvent,
   type LayoutChangeEvent,
   type PanResponderGestureState,
@@ -9,26 +8,21 @@ import {
   Text,
   View,
 } from "react-native";
-import { Check, CircleHelp, UserRound } from "lucide-react-native";
 import Svg, { Circle, G, Line, Path, Rect } from "react-native-svg";
 
 import { splitTrackAtGaps } from "../core/geo";
 import { pointsToPath, projectTracks } from "../core/projection";
-import type { Track, TrackPoint } from "../core/types";
+import type { Track } from "../core/types";
 import { colors } from "../theme";
 
-export interface MapMarker {
-  accessibilityLabel: string;
-  id: string;
-  point: TrackPoint;
-  variant: "complete" | "friend" | "goal" | "question";
-}
+export type MapLineTone = "confirmed" | "current" | "new" | "observed" | "raw";
 
 interface MapCanvasProps {
   fitTracks?: Track[];
-  markers?: MapMarker[];
-  onMarkerPress?: (id: string) => void;
+  lineTones?: Record<string, MapLineTone>;
   resetKey: number;
+  showNodes?: boolean;
+  showPosition?: boolean;
   tracks: Track[];
   zoomCommand: { id: number; direction: "in" | "out" };
 }
@@ -47,9 +41,10 @@ function touchDistance(event: GestureResponderEvent): number | null {
 
 export function MapCanvas({
   fitTracks,
-  markers = [],
-  onMarkerPress,
+  lineTones = {},
   resetKey,
+  showNodes = false,
+  showPosition = false,
   tracks,
   zoomCommand,
 }: MapCanvasProps) {
@@ -73,7 +68,7 @@ export function MapCanvas({
 
   useEffect(() => {
     resetTransform();
-  }, [resetKey, tracks.length]);
+  }, [resetKey]);
 
   useEffect(() => {
     if (zoomCommand.id === 0) return;
@@ -115,40 +110,18 @@ export function MapCanvas({
       ),
     [fitTracks, tracks],
   );
-  const markerTracks = useMemo(
-    () =>
-      markers.map((marker) => ({
-        createdAt: marker.point.timestamp,
-        id: `marker-${marker.id}`,
-        name: marker.accessibilityLabel,
-        points: [marker.point],
-        source: "demo" as const,
-      })),
-    [markers],
-  );
-
   const projection = useMemo(
     () =>
       projectTracks(
-        [...segmentedTracks, ...markerTracks],
+        segmentedTracks,
         size.width,
         size.height,
         Math.min(52, size.width * 0.14),
         segmentedFitTracks,
       ),
-    [
-      markerTracks,
-      segmentedFitTracks,
-      segmentedTracks,
-      size.height,
-      size.width,
-    ],
+    [segmentedFitTracks, segmentedTracks, size.height, size.width],
   );
-  const projectedTracks = projection.tracks.slice(0, segmentedTracks.length);
-  const projectedMarkers = markers.flatMap((marker, index) => {
-    const point = projection.tracks[segmentedTracks.length + index]?.points[0];
-    return point ? [{ marker, point }] : [];
-  });
+  const projectedTracks = projection.tracks;
 
   const panResponder = useMemo(
     () =>
@@ -263,46 +236,73 @@ export function MapCanvas({
           >
             {projectedTracks.map((track) => {
               const path = pointsToPath(track.points);
+              const originalId = track.id.replace(/-\d+$/, "");
+              const tone = lineTones[originalId] ?? "confirmed";
+              const stroke =
+                tone === "new"
+                  ? colors.warning
+                  : tone === "current"
+                    ? colors.signal
+                    : tone === "raw"
+                      ? colors.raw
+                      : tone === "observed"
+                        ? colors.observed
+                        : colors.accent;
+              const strokeWidth =
+                tone === "raw"
+                  ? 1.4
+                  : tone === "current"
+                    ? 2.2
+                    : tone === "new"
+                      ? 3.6
+                      : 2.8;
+              const opacity =
+                tone === "raw" ? 0.34 : tone === "observed" ? 0.66 : 1;
               return (
                 <G key={track.id}>
                   {track.points.length > 1 ? (
                     <>
+                      {tone === "new" || tone === "current" ? (
+                        <Path
+                          d={path}
+                          fill="none"
+                          opacity={tone === "current" ? 0.1 : 0.18}
+                          stroke={stroke}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={(strokeWidth + 6) / transform.scale}
+                        />
+                      ) : null}
                       <Path
                         d={path}
                         fill="none"
-                        opacity={0.18}
-                        stroke={colors.accent}
+                        opacity={opacity}
+                        stroke={stroke}
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={10 / transform.scale}
-                      />
-                      <Path
-                        d={path}
-                        fill="none"
-                        stroke={colors.accent}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={3 / transform.scale}
+                        strokeWidth={strokeWidth / transform.scale}
                       />
                     </>
                   ) : null}
-                  {track.points
-                    .filter((_, index) => index % 5 === 0)
-                    .map((point, index) => (
-                      <Circle
-                        cx={point.x}
-                        cy={point.y}
-                        fill={colors.ink}
-                        key={`${track.id}-node-${index}`}
-                        r={2.6 / transform.scale}
-                        stroke={colors.accent}
-                        strokeWidth={1.5 / transform.scale}
-                      />
-                    ))}
+                  {showNodes
+                    ? track.points
+                        .filter((_, index) => index % 5 === 0)
+                        .map((point, index) => (
+                          <Circle
+                            cx={point.x}
+                            cy={point.y}
+                            fill={colors.ink}
+                            key={`${track.id}-node-${index}`}
+                            r={2.6 / transform.scale}
+                            stroke={stroke}
+                            strokeWidth={1.5 / transform.scale}
+                          />
+                        ))
+                    : null}
                 </G>
               );
             })}
-            {finalPoint ? (
+            {showPosition && finalPoint ? (
               <>
                 <Circle
                   cx={finalPoint.x}
@@ -324,51 +324,10 @@ export function MapCanvas({
           </G>
         </Svg>
       ) : null}
-      <View style={styles.markerLayer}>
-        {projectedMarkers.map(({ marker, point }) => {
-          const left = transform.x + point.x * transform.scale - 20;
-          const top = transform.y + point.y * transform.scale - 20;
-          const foreground =
-            marker.variant === "goal"
-              ? colors.ink
-              : marker.variant === "friend"
-                ? colors.ink
-                : marker.variant === "complete"
-                  ? colors.ink
-                  : colors.signal;
-          return (
-            <Pressable
-              accessibilityLabel={marker.accessibilityLabel}
-              accessibilityRole="button"
-              key={marker.id}
-              onPress={() => onMarkerPress?.(marker.id)}
-              style={({ pressed }) => [
-                styles.marker,
-                { left, top },
-                marker.variant === "goal" && styles.markerGoal,
-                marker.variant === "question" && styles.markerQuestion,
-                marker.variant === "friend" && styles.markerFriend,
-                marker.variant === "complete" && styles.markerComplete,
-                pressed && styles.markerPressed,
-              ]}
-            >
-              {marker.variant === "goal" ? (
-                <Text style={styles.goalText}>!</Text>
-              ) : marker.variant === "friend" ? (
-                <UserRound color={foreground} size={19} strokeWidth={2.5} />
-              ) : marker.variant === "complete" ? (
-                <Check color={foreground} size={20} strokeWidth={3} />
-              ) : (
-                <CircleHelp color={foreground} size={21} strokeWidth={2.4} />
-              )}
-            </Pressable>
-          );
-        })}
-      </View>
       {tracks.every((track) => track.points.length === 0) ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyTitle}>UNWRITTEN TERRITORY</Text>
-          <Text style={styles.emptyCode}>NO CARTOGRAPHIC MEMORY</Text>
+          <Text style={styles.emptyCode}>NO OBSERVED EDGES</Text>
         </View>
       ) : null}
       <View style={styles.scaleReadout}>
@@ -413,50 +372,6 @@ const styles = StyleSheet.create({
     fontFamily: "monospace",
     fontSize: 14,
     fontWeight: "700",
-  },
-  goalText: {
-    color: colors.ink,
-    fontFamily: "monospace",
-    fontSize: 23,
-    fontWeight: "900",
-    lineHeight: 25,
-  },
-  marker: {
-    alignItems: "center",
-    borderRadius: 20,
-    borderWidth: 2,
-    height: 40,
-    justifyContent: "center",
-    position: "absolute",
-    width: 40,
-  },
-  markerComplete: {
-    backgroundColor: colors.accent,
-    borderColor: colors.ink,
-  },
-  markerFriend: {
-    backgroundColor: colors.friend,
-    borderColor: colors.ink,
-  },
-  markerGoal: {
-    backgroundColor: colors.warning,
-    borderColor: colors.ink,
-  },
-  markerLayer: {
-    bottom: 0,
-    left: 0,
-    pointerEvents: "box-none",
-    position: "absolute",
-    right: 0,
-    top: 0,
-  },
-  markerPressed: {
-    opacity: 0.68,
-    transform: [{ scale: 0.92 }],
-  },
-  markerQuestion: {
-    backgroundColor: colors.ink,
-    borderColor: colors.signal,
   },
   scaleBar: {
     backgroundColor: colors.muted,
