@@ -52,7 +52,7 @@ jobs:
           retention-days: 1
 
       - name: Install browsers
-        run: npx playwright install --with-deps chromium firefox
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Run responsive end-to-end tests
         run: npm run test:e2e

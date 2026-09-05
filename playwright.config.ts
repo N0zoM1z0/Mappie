@@ -23,10 +23,7 @@ export default defineConfig({
         viewport: { width: 1280, height: 800 },
       },
     },
-    {
-      name: "iphone-viewport",
-      use: { ...devices["iPhone 13"], browserName: "chromium" },
-    },
+    { name: "iphone-webkit", use: { ...devices["iPhone 13"] } },
   ],
   webServer: {
     command: "npx expo start --web --port 8081",

@@ -1,0 +1,27 @@
+{
+  "exportedAt": "2026-09-05T10:00:00.000Z",
+  "format": "mappie-exploration-archive",
+  "tracks": [
+    {
+      "createdAt": 1788608400000,
+      "id": "campus-loop",
+      "name": "Campus loop",
+      "points": [
+        {
+          "accuracy": 4,
+          "latitude": 25.0173,
+          "longitude": 121.5398,
+          "timestamp": 1788608400000
+        },
+        {
+          "accuracy": 5,
+          "latitude": 25.0176,
+          "longitude": 121.5402,
+          "timestamp": 1788608460000
+        }
+      ],
+      "source": "live"
+    }
+  ],
+  "version": 1
+}
