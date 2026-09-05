@@ -41,7 +41,7 @@ Pure geospatial and interchange logic. It parses GPX, measures Haversine distanc
 
 `src/services`
 
-Platform adapters. `location.ts` translates Expo location objects into the core `TrackPoint` type and owns the top-level background task. `storage.ts` owns the versioned AsyncStorage keys and serializes background writes so batches cannot overwrite one another within a process.
+Platform adapters. `location.ts` translates Expo location objects into the core `TrackPoint` type and owns the top-level background task. Native builds keep the versioned archive in AsyncStorage. Web builds resolve `storage.web.ts`, which stores the same repository records in IndexedDB and migrates the previous localStorage keys after a successful transaction. The shared repository serializes writes so concurrent batches cannot overwrite one another within a process.
 
 `src/state`
 

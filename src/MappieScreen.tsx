@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Alert,
   Linking,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -12,15 +13,19 @@ import {
 import * as DocumentPicker from "expo-document-picker";
 import { File as ExpoFile } from "expo-file-system";
 import {
+  ArchiveRestore,
   ChevronLeft,
   ChevronRight,
   CircleStop,
   Crosshair,
+  Download,
   GitMerge,
+  HardDrive,
   LocateFixed,
   Pause,
   Play,
   RotateCcw,
+  ShieldCheck,
   SkipBack,
   SkipForward,
   Trash2,
@@ -32,6 +37,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { IconButton } from "./components/IconButton";
 import { MapCanvas, type MapLineTone } from "./components/MapCanvas";
+import { parseMappieArchive, serializeMappieArchive } from "./core/archive";
 import { trackDistance } from "./core/geo";
 import { parseGPX } from "./core/gpx";
 import {
@@ -41,6 +47,7 @@ import {
 } from "./core/reconstruction";
 import type { Track } from "./core/types";
 import { DEMO_AREA_LABEL, demoSessions } from "./data/demoTrack";
+import { downloadTextFile } from "./services/browserDownload";
 import { useExploration } from "./state/useExploration";
 import { colors } from "./theme";
 
@@ -50,6 +57,16 @@ type MapLayer = "map" | "raw";
 function formatDistance(meters: number): string {
   if (meters < 1_000) return `${Math.round(meters)} M`;
   return `${(meters / 1_000).toFixed(meters < 10_000 ? 2 : 1)} KM`;
+}
+
+function formatBytes(bytes: number | null): string {
+  if (bytes === null) return "--";
+  if (bytes < 1_024) return `${bytes} B`;
+  if (bytes < 1_024 * 1_024) return `${(bytes / 1_024).toFixed(1)} KB`;
+  if (bytes < 1_024 * 1_024 * 1_024) {
+    return `${(bytes / (1_024 * 1_024)).toFixed(1)} MB`;
+  }
+  return `${(bytes / (1_024 * 1_024 * 1_024)).toFixed(1)} GB`;
 }
 
 function readout(
@@ -98,9 +115,12 @@ export function MappieScreen() {
     clearTracks,
     hydrated,
     message,
+    protectStorage,
     recording,
+    restoreArchive,
     startRecording,
     stopRecording,
+    storageStatus,
     tracks,
   } = useExploration();
   const [mode, setMode] = useState<ViewMode>("demo");
@@ -109,6 +129,9 @@ export function MappieScreen() {
   const [replayProgress, setReplayProgress] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [importing, setImporting] = useState(false);
+  const [archiveAction, setArchiveAction] = useState<
+    "backup" | "protect" | "restore" | null
+  >(null);
   const [resetKey, setResetKey] = useState(0);
   const [zoomCommand, setZoomCommand] = useState<{
     id: number;
@@ -282,6 +305,102 @@ export function MappieScreen() {
     }
   };
 
+  const backupArchive = () => {
+    setArchiveAction("backup");
+    try {
+      const date = new Date().toISOString().slice(0, 10);
+      downloadTextFile(
+        serializeMappieArchive(personalTracks),
+        `mappie-archive-${date}.json`,
+        "application/json",
+      );
+    } catch (error) {
+      Alert.alert(
+        "Archive backup failed",
+        error instanceof Error
+          ? error.message
+          : "Mappie could not create the archive file.",
+      );
+    } finally {
+      setArchiveAction(null);
+    }
+  };
+
+  const applyRestoredArchive = async (restoredTracks: Track[]) => {
+    setArchiveAction("restore");
+    try {
+      await restoreArchive(restoredTracks);
+      setMode("mine");
+      setResetKey((current) => current + 1);
+    } catch (error) {
+      Alert.alert(
+        "Archive restore failed",
+        error instanceof Error
+          ? error.message
+          : "Mappie could not save the restored archive.",
+      );
+    } finally {
+      setArchiveAction(null);
+    }
+  };
+
+  const restoreArchiveFile = async () => {
+    setArchiveAction("restore");
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        copyToCacheDirectory: true,
+        multiple: false,
+        type: ["application/json", "text/json", "*/*"],
+      });
+      if (result.canceled) return;
+      const asset = result.assets[0];
+      if (!asset) return;
+      const contents = asset.file
+        ? await asset.file.text()
+        : await new ExpoFile(asset.uri).text();
+      const archive = parseMappieArchive(contents);
+      const restore = () => void applyRestoredArchive(archive.tracks);
+
+      if (personalTracks.length === 0) {
+        await applyRestoredArchive(archive.tracks);
+        return;
+      }
+      Alert.alert(
+        "Replace personal map?",
+        `This archive contains ${archive.tracks.length} ${archive.tracks.length === 1 ? "session" : "sessions"} and will replace the map stored in this browser.`,
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Restore", onPress: restore },
+        ],
+      );
+    } catch (error) {
+      Alert.alert(
+        "Archive restore failed",
+        error instanceof Error
+          ? error.message
+          : "The selected file could not be read.",
+      );
+    } finally {
+      setArchiveAction(null);
+    }
+  };
+
+  const protectBrowserStorage = async () => {
+    setArchiveAction("protect");
+    try {
+      await protectStorage();
+    } catch (error) {
+      Alert.alert(
+        "Storage protection unavailable",
+        error instanceof Error
+          ? error.message
+          : "The browser could not protect this archive.",
+      );
+    } finally {
+      setArchiveAction(null);
+    }
+  };
+
   const toggleRecording = async () => {
     setMode("mine");
     try {
@@ -444,6 +563,58 @@ export function MappieScreen() {
           warning={recording}
         />
       </View>
+
+      {mode === "mine" && Platform.OS === "web" ? (
+        <View
+          style={[styles.storageBand, compact && styles.storageBandCompact]}
+        >
+          <View style={styles.storageCopy}>
+            <View style={styles.storageHeading}>
+              <HardDrive color={colors.accent} size={14} />
+              <Text style={styles.storageLabel}>
+                BROWSER ARCHIVE /{" "}
+                {storageStatus?.backend.toUpperCase() ?? "..."}
+              </Text>
+            </View>
+            <Text numberOfLines={1} style={styles.storageValue}>
+              {formatBytes(storageStatus?.usedBytes ?? 0)} MAPPIE DATA /{" "}
+              {formatBytes(storageStatus?.quotaBytes ?? null)} LIMIT /{" "}
+              {storageStatus?.persisted ? "PERSISTENT" : "BEST EFFORT"}
+            </Text>
+          </View>
+          <View style={styles.storageActions}>
+            <IconButton
+              accessibilityLabel="Protect browser storage"
+              disabled={
+                archiveAction !== null ||
+                !storageStatus?.persistenceAvailable ||
+                storageStatus.persisted === true
+              }
+              icon={ShieldCheck}
+              label={compact ? undefined : "PROTECT"}
+              onPress={() => void protectBrowserStorage()}
+            />
+            <IconButton
+              accessibilityLabel="Back up Mappie archive"
+              disabled={
+                archiveAction !== null ||
+                personalTracks.length === 0 ||
+                recording
+              }
+              icon={Download}
+              label={compact ? undefined : "BACKUP"}
+              onPress={backupArchive}
+            />
+            <IconButton
+              accessibilityLabel="Restore Mappie archive"
+              disabled={archiveAction !== null || recording}
+              icon={ArchiveRestore}
+              label={compact ? undefined : "RESTORE"}
+              onPress={() => void restoreArchiveFile()}
+            />
+          </View>
+        </View>
+      ) : null}
 
       <View style={[styles.commandBar, compact && styles.commandBarCompact]}>
         {mode === "demo" ? (
@@ -914,6 +1085,47 @@ const styles = StyleSheet.create({
     fontSize: 8,
     lineHeight: 12,
     marginTop: 2,
+  },
+  storageActions: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  storageBand: {
+    alignItems: "center",
+    backgroundColor: colors.panel,
+    borderTopColor: colors.line,
+    borderTopWidth: 1,
+    flexDirection: "row",
+    gap: 14,
+    minHeight: 64,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+  },
+  storageBandCompact: {
+    alignItems: "stretch",
+    flexDirection: "column",
+    gap: 8,
+  },
+  storageCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  storageHeading: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 7,
+  },
+  storageLabel: {
+    color: colors.accent,
+    fontFamily: "monospace",
+    fontSize: 9,
+    fontWeight: "700",
+  },
+  storageValue: {
+    color: colors.muted,
+    fontFamily: "monospace",
+    fontSize: 8,
+    marginTop: 4,
   },
   telemetry: {
     backgroundColor: colors.panelRaised,

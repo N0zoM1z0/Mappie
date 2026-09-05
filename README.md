@@ -30,10 +30,13 @@ The name and original premise come from the fictional GPS tool in the visual nov
 - GPX 1.1 track and route import
 - Foreground GPS recording on iOS, Android, and compatible browsers
 - Background GPS buffering in iOS/Android development builds
-- Local-only archive and interrupted-session recovery
+- IndexedDB archives on the web with automatic migration from the earlier localStorage format
+- Browser storage persistence status, explicit protection requests, and visible usage
+- Complete versioned archive backup and restore
+- Local interrupted-session recovery
 - Accuracy, speed, movement, and timestamp filtering
 - Distance, location-fix, session, and live-state telemetry
-- Responsive layouts tested in desktop Chromium, desktop Firefox, and at iPhone dimensions
+- Responsive layouts tested in desktop Chromium, desktop Firefox, and mobile WebKit
 
 The public replay makes the central loop testable without a physical phone. Step through repeated Cambridge sessions to watch overlap consolidate and new branches extend the map, then switch to `MY MAP` for imported or recorded paths. Personal routes never mix with the bundled demo archive.
 
@@ -76,7 +79,7 @@ npm run test:e2e
 npm run build:web
 ```
 
-The unit suite covers GPX parsing, GPS rejection rules, distance measurement, time-gap segmentation, viewport projection, graph reconstruction, and the public session registry. The Playwright suite boots the real web bundle in Chromium and Firefox, advances beyond 30 sessions, enforces a bounded SVG DOM, switches between merged and raw geometry, checks horizontal overflow, and exercises the personal-map mode at desktop and iPhone dimensions.
+The unit suite covers archive validation, storage error handling, GPX parsing, GPS rejection rules, distance measurement, time-gap segmentation, viewport projection, graph reconstruction, and the public session registry. The Playwright suite boots the real web bundle in Chromium, Firefox, and mobile WebKit; advances beyond 30 sessions; enforces a bounded SVG DOM; switches between merged and raw geometry; checks horizontal overflow; and exercises IndexedDB migration, persistence requests, backup, restore, and reload behavior.
 
 ## Architecture
 
@@ -110,7 +113,9 @@ See the [Firefox replay performance case study](docs/performance.md) for the ori
 - The iOS background-location indicator is enabled
 - Clearing `MY MAP` removes the archive, active track, and background buffer
 
-AsyncStorage is suitable for the current prototype. Before storing large histories or an OpenStreetMap edge graph, the archive will move to SQLite with a migration path from schema version 1.
+The web archive uses IndexedDB and can request persistent browser storage. Existing localStorage archives migrate automatically on first load, and a versioned JSON backup can move the complete personal map between browser profiles. Native builds continue to use AsyncStorage for the prototype and will move to SQLite before carrying large histories.
+
+See [Browser storage](docs/storage.md) for the migration, backup format, quota handling, and remaining browser limitations.
 
 ## Public test data
 
@@ -122,7 +127,7 @@ See [Rewrite Mappie reference](docs/rewrite-reference.md) for the source-backed 
 
 ## Roadmap
 
-- Persist large archives and spatial indexes in SQLite
+- Persist large native archives and spatial indexes in SQLite
 - Import and export complete archives as GPX/GeoJSON
 - Replace proximity graph snapping with a production map-matching pipeline
 - Store inferred local edges separately from raw private trajectories
