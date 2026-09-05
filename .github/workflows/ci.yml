@@ -85,7 +85,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           projects="$(npx --yes wrangler@4.86.0 pages project list --json)"
-          if ! jq -e 'map(select(.name == "mappie")) | length > 0' <<<"$projects" >/dev/null; then
+          if ! jq -e 'map(select(.["Project Name"] == "mappie")) | length > 0' <<<"$projects" >/dev/null; then
             npx --yes wrangler@4.86.0 pages project create mappie --production-branch main
           fi
 
