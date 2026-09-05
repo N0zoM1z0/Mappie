@@ -12,6 +12,8 @@ When I first played _Rewrite_, Mappie was one of those small ideas that stayed w
 
 This Mappie is a personal cartography experiment built around the same feeling. You begin with a blank field. Each walk reveals a little more of the place around you: familiar paths line up, noisy GPS traces settle into shared routes, and a turn into somewhere new becomes another branch. Walk through the same area often enough and a rough, personal map slowly appears.
 
+So when does a map like this become useful? _Rewrite_ gives my favorite answer. Kotarou spends so much time wandering through the forest around Kazamatsuri that Mappie quietly builds up a record of where he has been. Later, when Inoue goes missing, that accumulated map becomes a real help in the search. I have always loved that payoff: a collection of ordinary walks suddenly turns into knowledge of a place that matters.
+
 It is a simple open-source project made for the pleasure of watching familiar places emerge one walk at a time.
 
 <p align="center">
