@@ -40,10 +40,61 @@ jobs:
         run: npm run test:coverage
 
       - name: Export web production bundle
-        run: npx expo export --platform web
+        run: npm run build:web
+
+      - name: Upload web production bundle
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v7
+        with:
+          name: web-production
+          path: dist
+          if-no-files-found: error
+          retention-days: 1
 
       - name: Install browsers
         run: npx playwright install --with-deps chromium firefox
 
       - name: Run responsive end-to-end tests
         run: npm run test:e2e
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      deployments: write
+    environment:
+      name: cloudflare-pages
+      url: ${{ steps.deploy.outputs.deployment-url }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Download verified web bundle
+        uses: actions/download-artifact@v8
+        with:
+          name: web-production
+          path: dist
+
+      - name: Ensure Cloudflare Pages project exists
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          projects="$(npx --yes wrangler@4.86.0 pages project list --json)"
+          if ! jq -e 'map(select(.name == "mappie")) | length > 0' <<<"$projects" >/dev/null; then
+            npx --yes wrangler@4.86.0 pages project create mappie --production-branch main
+          fi
+
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.86.0"
+          command: pages deploy dist --project-name=mappie --branch=main
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

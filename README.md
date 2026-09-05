@@ -44,6 +44,8 @@ npm run web
 
 Open `http://localhost:8081` when Expo is ready. The web build can replay the fixture, import GPX files, and collect foreground browser geolocation when the page is served from localhost or HTTPS.
 
+The production web app is deployed to Cloudflare Pages after every verified push to `main`. See [Deployment](docs/deployment.md) for the pipeline, required repository secrets, and recovery steps.
+
 For an iPhone, install Expo Go and run:
 
 ```bash
@@ -67,7 +69,7 @@ The app config already declares the `location` background mode and human-readabl
 npm run typecheck
 npm test
 npm run test:e2e
-npx expo export --platform web
+npm run build:web
 ```
 
 The unit suite covers GPX parsing, GPS rejection rules, distance measurement, time-gap segmentation, viewport projection, graph reconstruction, and the public session registry. The Playwright suite boots the real web bundle in Chromium and Firefox, advances beyond 30 sessions, enforces a bounded SVG DOM, switches between merged and raw geometry, checks horizontal overflow, and exercises the personal-map mode at desktop and iPhone dimensions.
