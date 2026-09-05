@@ -6,6 +6,8 @@
 
 **The world is blank until you walk through it.**
 
+[Open the live web app](https://mappie-c70.pages.dev)
+
 Mappie is an open-source personal cartography experiment. Instead of showing a complete map and drawing a workout on top, it starts with an empty field and renders only the paths that have entered your own history.
 
 > **We are not recreating the Mappie minigame from _Rewrite_. We are implementing the fictional software at the center of its premise: personally walking through an unknown place and building its map from zero.**

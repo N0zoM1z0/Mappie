@@ -1,6 +1,6 @@
 # Cloudflare Pages deployment
 
-Mappie's production web bundle is deployed to Cloudflare Pages by the existing GitHub Actions workflow in `.github/workflows/ci.yml`. Cloudflare receives only the static Expo export. The app has no production server or server-side data store.
+Mappie's production web bundle is deployed to [mappie-c70.pages.dev](https://mappie-c70.pages.dev) by the existing GitHub Actions workflow in `.github/workflows/ci.yml`. Cloudflare receives only the static Expo export. The app has no production server or server-side data store.
 
 ## Pipeline
 
