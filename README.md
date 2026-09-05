@@ -8,9 +8,7 @@
 
 Mappie is an open-source personal cartography experiment. Instead of showing a complete map and drawing a workout on top, it starts with an empty field and renders only the paths that have entered your own history.
 
-> **我們不是在復刻 _Rewrite_ 的 Mappie 小遊戲，而是在實現它世界觀裡那個「靠親自走過，從零建立未知地圖」的軟體。**
->
-> We are not recreating the Mappie minigame from _Rewrite_. We are implementing the fictional software at the center of its premise: personally walking through an unknown place and building its map from zero.
+> **We are not recreating the Mappie minigame from _Rewrite_. We are implementing the fictional software at the center of its premise: personally walking through an unknown place and building its map from zero.**
 
 There is no story, quest, `?`, or `!` layer in the real-world product. Its core loop is repeated observation: each walk should merge with paths already seen despite ordinary GPS drift, extend the known network where it enters new ground, and gradually turn rough traces into a stable map.
 
