@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   PanResponder,
+  Pressable,
   type GestureResponderEvent,
   type LayoutChangeEvent,
   type PanResponderGestureState,
@@ -8,23 +9,25 @@ import {
   Text,
   View,
 } from "react-native";
-import Svg, {
-  Circle,
-  G,
-  Line,
-  Path,
-  Rect,
-  Text as SvgText,
-} from "react-native-svg";
+import { Check, CircleHelp, UserRound } from "lucide-react-native";
+import Svg, { Circle, G, Line, Path, Rect } from "react-native-svg";
 
 import { splitTrackAtGaps } from "../core/geo";
 import { pointsToPath, projectTracks } from "../core/projection";
-import type { Track } from "../core/types";
+import type { Track, TrackPoint } from "../core/types";
 import { colors } from "../theme";
+
+export interface MapMarker {
+  accessibilityLabel: string;
+  id: string;
+  point: TrackPoint;
+  variant: "complete" | "friend" | "goal" | "question";
+}
 
 interface MapCanvasProps {
   fitTracks?: Track[];
-  frontierVisible?: boolean;
+  markers?: MapMarker[];
+  onMarkerPress?: (id: string) => void;
   resetKey: number;
   tracks: Track[];
   zoomCommand: { id: number; direction: "in" | "out" };
@@ -44,7 +47,8 @@ function touchDistance(event: GestureResponderEvent): number | null {
 
 export function MapCanvas({
   fitTracks,
-  frontierVisible = false,
+  markers = [],
+  onMarkerPress,
   resetKey,
   tracks,
   zoomCommand,
@@ -111,18 +115,40 @@ export function MapCanvas({
       ),
     [fitTracks, tracks],
   );
+  const markerTracks = useMemo(
+    () =>
+      markers.map((marker) => ({
+        createdAt: marker.point.timestamp,
+        id: `marker-${marker.id}`,
+        name: marker.accessibilityLabel,
+        points: [marker.point],
+        source: "demo" as const,
+      })),
+    [markers],
+  );
 
   const projection = useMemo(
     () =>
       projectTracks(
-        segmentedTracks,
+        [...segmentedTracks, ...markerTracks],
         size.width,
         size.height,
         Math.min(52, size.width * 0.14),
         segmentedFitTracks,
       ),
-    [segmentedFitTracks, segmentedTracks, size.height, size.width],
+    [
+      markerTracks,
+      segmentedFitTracks,
+      segmentedTracks,
+      size.height,
+      size.width,
+    ],
   );
+  const projectedTracks = projection.tracks.slice(0, segmentedTracks.length);
+  const projectedMarkers = markers.flatMap((marker, index) => {
+    const point = projection.tracks[segmentedTracks.length + index]?.points[0];
+    return point ? [{ marker, point }] : [];
+  });
 
   const panResponder = useMemo(
     () =>
@@ -177,7 +203,7 @@ export function MapCanvas({
     { length: Math.ceil(size.height / 44) + 1 },
     (_, index) => index * 44,
   );
-  const finalPoint = projection.tracks.at(-1)?.points.at(-1);
+  const finalPoint = projectedTracks.at(-1)?.points.at(-1);
 
   return (
     <View
@@ -235,7 +261,7 @@ export function MapCanvas({
           <G
             transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})`}
           >
-            {projection.tracks.map((track) => {
+            {projectedTracks.map((track) => {
               const path = pointsToPath(track.points);
               return (
                 <G key={track.id}>
@@ -284,40 +310,68 @@ export function MapCanvas({
                   fill="none"
                   opacity={0.45}
                   r={12 / transform.scale}
-                  stroke={frontierVisible ? colors.warning : colors.accent}
+                  stroke={colors.accent}
                   strokeWidth={1 / transform.scale}
                 />
                 <Circle
                   cx={finalPoint.x}
                   cy={finalPoint.y}
-                  fill={frontierVisible ? colors.warning : colors.accent}
+                  fill={colors.accent}
                   r={5 / transform.scale}
                 />
-                {frontierVisible ? (
-                  <SvgText
-                    fill={colors.ink}
-                    fontFamily="monospace"
-                    fontSize={10 / transform.scale}
-                    fontWeight="700"
-                    textAnchor="middle"
-                    x={finalPoint.x}
-                    y={finalPoint.y + 3 / transform.scale}
-                  >
-                    ?
-                  </SvgText>
-                ) : null}
               </>
             ) : null}
           </G>
         </Svg>
       ) : null}
+      <View style={styles.markerLayer}>
+        {projectedMarkers.map(({ marker, point }) => {
+          const left = transform.x + point.x * transform.scale - 20;
+          const top = transform.y + point.y * transform.scale - 20;
+          const foreground =
+            marker.variant === "goal"
+              ? colors.ink
+              : marker.variant === "friend"
+                ? colors.ink
+                : marker.variant === "complete"
+                  ? colors.ink
+                  : colors.signal;
+          return (
+            <Pressable
+              accessibilityLabel={marker.accessibilityLabel}
+              accessibilityRole="button"
+              key={marker.id}
+              onPress={() => onMarkerPress?.(marker.id)}
+              style={({ pressed }) => [
+                styles.marker,
+                { left, top },
+                marker.variant === "goal" && styles.markerGoal,
+                marker.variant === "question" && styles.markerQuestion,
+                marker.variant === "friend" && styles.markerFriend,
+                marker.variant === "complete" && styles.markerComplete,
+                pressed && styles.markerPressed,
+              ]}
+            >
+              {marker.variant === "goal" ? (
+                <Text style={styles.goalText}>!</Text>
+              ) : marker.variant === "friend" ? (
+                <UserRound color={foreground} size={19} strokeWidth={2.5} />
+              ) : marker.variant === "complete" ? (
+                <Check color={foreground} size={20} strokeWidth={3} />
+              ) : (
+                <CircleHelp color={foreground} size={21} strokeWidth={2.4} />
+              )}
+            </Pressable>
+          );
+        })}
+      </View>
       {tracks.every((track) => track.points.length === 0) ? (
-        <View pointerEvents="none" style={styles.emptyState}>
+        <View style={styles.emptyState}>
           <Text style={styles.emptyTitle}>UNWRITTEN TERRITORY</Text>
           <Text style={styles.emptyCode}>NO CARTOGRAPHIC MEMORY</Text>
         </View>
       ) : null}
-      <View pointerEvents="none" style={styles.scaleReadout}>
+      <View style={styles.scaleReadout}>
         <View style={styles.scaleBar} />
         <Text style={styles.scaleText}>
           {Math.max(
@@ -349,6 +403,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: "center",
     left: 0,
+    pointerEvents: "none",
     position: "absolute",
     right: 0,
     top: 0,
@@ -359,6 +414,50 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
   },
+  goalText: {
+    color: colors.ink,
+    fontFamily: "monospace",
+    fontSize: 23,
+    fontWeight: "900",
+    lineHeight: 25,
+  },
+  marker: {
+    alignItems: "center",
+    borderRadius: 20,
+    borderWidth: 2,
+    height: 40,
+    justifyContent: "center",
+    position: "absolute",
+    width: 40,
+  },
+  markerComplete: {
+    backgroundColor: colors.accent,
+    borderColor: colors.ink,
+  },
+  markerFriend: {
+    backgroundColor: colors.friend,
+    borderColor: colors.ink,
+  },
+  markerGoal: {
+    backgroundColor: colors.warning,
+    borderColor: colors.ink,
+  },
+  markerLayer: {
+    bottom: 0,
+    left: 0,
+    pointerEvents: "box-none",
+    position: "absolute",
+    right: 0,
+    top: 0,
+  },
+  markerPressed: {
+    opacity: 0.68,
+    transform: [{ scale: 0.92 }],
+  },
+  markerQuestion: {
+    backgroundColor: colors.ink,
+    borderColor: colors.signal,
+  },
   scaleBar: {
     backgroundColor: colors.muted,
     height: 1,
@@ -367,6 +466,7 @@ const styles = StyleSheet.create({
   scaleReadout: {
     alignItems: "flex-end",
     bottom: 14,
+    pointerEvents: "none",
     position: "absolute",
     right: 14,
   },

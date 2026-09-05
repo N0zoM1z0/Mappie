@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("renders and replays the public walking trace without overflow", async ({
+test("explores public traces and records optional discoveries", async ({
   page,
 }) => {
   await page.goto("/");
@@ -9,6 +9,23 @@ test("renders and replays the public walking trace without overflow", async ({
   await expect(page.locator("svg path").first()).toBeVisible({
     timeout: 10_000,
   });
+  const discovery = page.getByRole("button", { name: /Open discovery:/ });
+  await expect(discovery).toBeVisible({ timeout: 10_000 });
+  await discovery.click();
+  await expect(page.getByText("1/3", { exact: true })).toBeVisible();
+  await expect(page.getByText(/MEMORY ADDED/)).toBeVisible();
+
+  await page.getByRole("button", { name: "Play public trace replay" }).click();
+  const person = page.getByRole("button", {
+    name: "Open discovery: Passing mapper",
+  });
+  await expect(person).toBeVisible({ timeout: 10_000 });
+  await person.click();
+  await expect(page.getByText("2/3", { exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "Next public trace" }).click();
+  await expect(page.getByText(/OSM TRACE 12425703/)).toBeVisible();
+  await expect(page.getByText(/ARCTIC WALKING LOOP/)).toBeVisible();
 
   const overflow = await page.evaluate(
     () =>

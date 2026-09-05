@@ -17,7 +17,8 @@ The interaction is inspired by the fictional GPS tool named Mappie in the visual
 ## What works
 
 - A blank, pan-and-zoom vector canvas with no commercial basemap
-- Animated replay of a real public walking trace
+- Animated gallery of six real, public walking, hiking, running, and cycling traces
+- Rewrite-inspired `!` target, proximity-revealed `?` and person signals, and Memory state
 - GPX 1.1 track and route import
 - Foreground GPS recording on iOS, Android, and compatible browsers
 - Background GPS buffering in iOS/Android development builds
@@ -26,7 +27,7 @@ The interaction is inspired by the fictional GPS tool named Mappie in the visual
 - Distance, location-fix, session, and live-state telemetry
 - Responsive layouts tested at desktop and iPhone dimensions
 
-The included public trace makes the central loop testable without a physical phone. Switch between `PUBLIC TRACE` and `MY MAP`; imported and recorded routes never mix with the bundled demo archive.
+The public trace gallery makes the central loop testable without a physical phone. Use the arrow controls to compare six route shapes, open optional signals before reaching `!`, and switch to `MY MAP` for imported or recorded paths. Personal routes never mix with the bundled demo archive.
 
 ## Quick start
 
@@ -65,7 +66,7 @@ npm run test:e2e
 npx expo export --platform web
 ```
 
-The unit suite covers GPX parsing, GPS rejection rules, distance measurement, time-gap segmentation, and viewport projection. The Playwright suite boots the real web bundle at desktop and iPhone dimensions, verifies that a route is drawn, checks horizontal overflow, and exercises the map-mode switch.
+The unit suite covers GPX parsing, GPS rejection rules, distance measurement, time-gap segmentation, viewport projection, and the public route registry. The Playwright suite boots the real web bundle at desktop and iPhone dimensions, opens a discovery, changes public routes, checks horizontal overflow, and exercises the map-mode switch.
 
 ## Architecture
 
@@ -98,9 +99,11 @@ AsyncStorage is suitable for the current prototype. Before storing large histori
 
 ## Public test data
 
-`fixtures/osm-rochdale-canal-walk.json` contains 33 track points derived from the public OpenStreetMap GPS trace [TS1892a.GPX](https://www.openstreetmap.org/user/SomeoneElse/traces/11982156), described by its uploader as a walk near the Rochdale Canal at Mills Hill.
+The gallery contains six OpenStreetMap GPS traces whose source pages were explicitly marked `PUBLIC`. Long traces are sampled to 240 ordered points for mobile replay while their original point counts remain visible in the UI.
 
 Fixture data is provided under the Open Database License 1.0 with attribution to OpenStreetMap contributors. Application source code is separately licensed under MIT. See [Data attribution](docs/data-attribution.md).
+
+See [Rewrite Mappie reference](docs/rewrite-reference.md) for the source-backed interaction analysis, the fidelity assessment, and the deliberate mobile adaptations.
 
 ## Roadmap
 
@@ -108,8 +111,8 @@ Fixture data is provided under the Open Database License 1.0 with attribution to
 - Import and export complete archives as GPX/GeoJSON
 - Map-match GPS observations against cached OpenStreetMap road edges
 - Store explored edge identifiers separately from raw private trajectories
-- Model discoveries as `UNKNOWN -> DISCOVERED -> KNOWN`
-- Add private `?`, `!`, friend, memory, and quest annotations
+- Persist demo-style `UNKNOWN -> DISCOVERED -> KNOWN` state on personal maps
+- Add private quest dependencies and user-authored people/POI annotations
 - Compute neighborhood coverage without streaks or leaderboards
 - Add battery-aware deferred collection presets and Apple Watch capture
 

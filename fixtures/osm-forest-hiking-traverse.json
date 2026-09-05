@@ -1,0 +1,1452 @@
+{
+  "activity": "HIKE",
+  "license": "ODbL 1.0; (c) OpenStreetMap contributors",
+  "name": "Forest Hiking Traverse",
+  "originalPointCount": 6221,
+  "source": "OpenStreetMap public GPS trace 2026_07_20_3127025778_Wandern.gpx",
+  "sourceUrl": "https://www.openstreetmap.org/user/propivo/traces/12437049",
+  "traceId": 12437049,
+  "visibility": "PUBLIC",
+  "points": [
+    {
+      "latitude": 46.837756,
+      "longitude": 8.187813,
+      "elevation": 485.881273,
+      "time": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "latitude": 46.838368,
+      "longitude": 8.189769,
+      "elevation": 488.71743,
+      "time": "2026-01-01T00:00:01.000Z"
+    },
+    {
+      "latitude": 46.839259,
+      "longitude": 8.191621,
+      "elevation": 493.950744,
+      "time": "2026-01-01T00:00:02.000Z"
+    },
+    {
+      "latitude": 46.840229,
+      "longitude": 8.193618,
+      "elevation": 494.505619,
+      "time": "2026-01-01T00:00:03.000Z"
+    },
+    {
+      "latitude": 46.840902,
+      "longitude": 8.195362,
+      "elevation": 495.135767,
+      "time": "2026-01-01T00:00:04.000Z"
+    },
+    {
+      "latitude": 46.840757,
+      "longitude": 8.195214,
+      "elevation": 510.99259,
+      "time": "2026-01-01T00:00:05.000Z"
+    },
+    {
+      "latitude": 46.840472,
+      "longitude": 8.195187,
+      "elevation": 529.446597,
+      "time": "2026-01-01T00:00:06.000Z"
+    },
+    {
+      "latitude": 46.840255,
+      "longitude": 8.195339,
+      "elevation": 546.344541,
+      "time": "2026-01-01T00:00:07.000Z"
+    },
+    {
+      "latitude": 46.839971,
+      "longitude": 8.19485,
+      "elevation": 564.993093,
+      "time": "2026-01-01T00:00:08.000Z"
+    },
+    {
+      "latitude": 46.839747,
+      "longitude": 8.195074,
+      "elevation": 580.688115,
+      "time": "2026-01-01T00:00:09.000Z"
+    },
+    {
+      "latitude": 46.839535,
+      "longitude": 8.195198,
+      "elevation": 588.121377,
+      "time": "2026-01-01T00:00:10.000Z"
+    },
+    {
+      "latitude": 46.839624,
+      "longitude": 8.196461,
+      "elevation": 594.65264,
+      "time": "2026-01-01T00:00:11.000Z"
+    },
+    {
+      "latitude": 46.839374,
+      "longitude": 8.19724,
+      "elevation": 608.923103,
+      "time": "2026-01-01T00:00:12.000Z"
+    },
+    {
+      "latitude": 46.839031,
+      "longitude": 8.197062,
+      "elevation": 625.381162,
+      "time": "2026-01-01T00:00:13.000Z"
+    },
+    {
+      "latitude": 46.838002,
+      "longitude": 8.196559,
+      "elevation": 647.561602,
+      "time": "2026-01-01T00:00:14.000Z"
+    },
+    {
+      "latitude": 46.837058,
+      "longitude": 8.197125,
+      "elevation": 666.54857,
+      "time": "2026-01-01T00:00:15.000Z"
+    },
+    {
+      "latitude": 46.836429,
+      "longitude": 8.198245,
+      "elevation": 677.63082,
+      "time": "2026-01-01T00:00:16.000Z"
+    },
+    {
+      "latitude": 46.836415,
+      "longitude": 8.198328,
+      "elevation": 676.620724,
+      "time": "2026-01-01T00:00:17.000Z"
+    },
+    {
+      "latitude": 46.836133,
+      "longitude": 8.198774,
+      "elevation": 678.603678,
+      "time": "2026-01-01T00:00:18.000Z"
+    },
+    {
+      "latitude": 46.835532,
+      "longitude": 8.199442,
+      "elevation": 686.174748,
+      "time": "2026-01-01T00:00:19.000Z"
+    },
+    {
+      "latitude": 46.835151,
+      "longitude": 8.200073,
+      "elevation": 691.543986,
+      "time": "2026-01-01T00:00:20.000Z"
+    },
+    {
+      "latitude": 46.834695,
+      "longitude": 8.200759,
+      "elevation": 697.588843,
+      "time": "2026-01-01T00:00:21.000Z"
+    },
+    {
+      "latitude": 46.834513,
+      "longitude": 8.200436,
+      "elevation": 712.414533,
+      "time": "2026-01-01T00:00:22.000Z"
+    },
+    {
+      "latitude": 46.835043,
+      "longitude": 8.199843,
+      "elevation": 719.796005,
+      "time": "2026-01-01T00:00:23.000Z"
+    },
+    {
+      "latitude": 46.835352,
+      "longitude": 8.198953,
+      "elevation": 725.915466,
+      "time": "2026-01-01T00:00:24.000Z"
+    },
+    {
+      "latitude": 46.834859,
+      "longitude": 8.200222,
+      "elevation": 730.824069,
+      "time": "2026-01-01T00:00:25.000Z"
+    },
+    {
+      "latitude": 46.834224,
+      "longitude": 8.200946,
+      "elevation": 722.863805,
+      "time": "2026-01-01T00:00:26.000Z"
+    },
+    {
+      "latitude": 46.834058,
+      "longitude": 8.201808,
+      "elevation": 730.050786,
+      "time": "2026-01-01T00:00:27.000Z"
+    },
+    {
+      "latitude": 46.833474,
+      "longitude": 8.202209,
+      "elevation": 738.945684,
+      "time": "2026-01-01T00:00:28.000Z"
+    },
+    {
+      "latitude": 46.832381,
+      "longitude": 8.202939,
+      "elevation": 754.391647,
+      "time": "2026-01-01T00:00:29.000Z"
+    },
+    {
+      "latitude": 46.831596,
+      "longitude": 8.204063,
+      "elevation": 765.478238,
+      "time": "2026-01-01T00:00:30.000Z"
+    },
+    {
+      "latitude": 46.830858,
+      "longitude": 8.203757,
+      "elevation": 778.327582,
+      "time": "2026-01-01T00:00:31.000Z"
+    },
+    {
+      "latitude": 46.830441,
+      "longitude": 8.203756,
+      "elevation": 785.50489,
+      "time": "2026-01-01T00:00:32.000Z"
+    },
+    {
+      "latitude": 46.830223,
+      "longitude": 8.20423,
+      "elevation": 793.582869,
+      "time": "2026-01-01T00:00:33.000Z"
+    },
+    {
+      "latitude": 46.829671,
+      "longitude": 8.204353,
+      "elevation": 806.606168,
+      "time": "2026-01-01T00:00:34.000Z"
+    },
+    {
+      "latitude": 46.829455,
+      "longitude": 8.205449,
+      "elevation": 818.655875,
+      "time": "2026-01-01T00:00:35.000Z"
+    },
+    {
+      "latitude": 46.829034,
+      "longitude": 8.206551,
+      "elevation": 823.675245,
+      "time": "2026-01-01T00:00:36.000Z"
+    },
+    {
+      "latitude": 46.828391,
+      "longitude": 8.207722,
+      "elevation": 829.333434,
+      "time": "2026-01-01T00:00:37.000Z"
+    },
+    {
+      "latitude": 46.827602,
+      "longitude": 8.208651,
+      "elevation": 837.676875,
+      "time": "2026-01-01T00:00:38.000Z"
+    },
+    {
+      "latitude": 46.826773,
+      "longitude": 8.208788,
+      "elevation": 845.33514,
+      "time": "2026-01-01T00:00:39.000Z"
+    },
+    {
+      "latitude": 46.826928,
+      "longitude": 8.20853,
+      "elevation": 844.718937,
+      "time": "2026-01-01T00:00:40.000Z"
+    },
+    {
+      "latitude": 46.825865,
+      "longitude": 8.208553,
+      "elevation": 847.303016,
+      "time": "2026-01-01T00:00:41.000Z"
+    },
+    {
+      "latitude": 46.825126,
+      "longitude": 8.209383,
+      "elevation": 855.317629,
+      "time": "2026-01-01T00:00:42.000Z"
+    },
+    {
+      "latitude": 46.824431,
+      "longitude": 8.210123,
+      "elevation": 865.223888,
+      "time": "2026-01-01T00:00:43.000Z"
+    },
+    {
+      "latitude": 46.823856,
+      "longitude": 8.21057,
+      "elevation": 874.554708,
+      "time": "2026-01-01T00:00:44.000Z"
+    },
+    {
+      "latitude": 46.823807,
+      "longitude": 8.210641,
+      "elevation": 873.107808,
+      "time": "2026-01-01T00:00:45.000Z"
+    },
+    {
+      "latitude": 46.823951,
+      "longitude": 8.210608,
+      "elevation": 872.652375,
+      "time": "2026-01-01T00:00:46.000Z"
+    },
+    {
+      "latitude": 46.823982,
+      "longitude": 8.210674,
+      "elevation": 872.699085,
+      "time": "2026-01-01T00:00:47.000Z"
+    },
+    {
+      "latitude": 46.823746,
+      "longitude": 8.210529,
+      "elevation": 890.561543,
+      "time": "2026-01-01T00:00:48.000Z"
+    },
+    {
+      "latitude": 46.823442,
+      "longitude": 8.210395,
+      "elevation": 902.180747,
+      "time": "2026-01-01T00:00:49.000Z"
+    },
+    {
+      "latitude": 46.822905,
+      "longitude": 8.21064,
+      "elevation": 908.47028,
+      "time": "2026-01-01T00:00:50.000Z"
+    },
+    {
+      "latitude": 46.822685,
+      "longitude": 8.211445,
+      "elevation": 915.794428,
+      "time": "2026-01-01T00:00:51.000Z"
+    },
+    {
+      "latitude": 46.822014,
+      "longitude": 8.212092,
+      "elevation": 922.962786,
+      "time": "2026-01-01T00:00:52.000Z"
+    },
+    {
+      "latitude": 46.821319,
+      "longitude": 8.212574,
+      "elevation": 928.757892,
+      "time": "2026-01-01T00:00:53.000Z"
+    },
+    {
+      "latitude": 46.820772,
+      "longitude": 8.212845,
+      "elevation": 934.982278,
+      "time": "2026-01-01T00:00:54.000Z"
+    },
+    {
+      "latitude": 46.820436,
+      "longitude": 8.212811,
+      "elevation": 936.264739,
+      "time": "2026-01-01T00:00:55.000Z"
+    },
+    {
+      "latitude": 46.819882,
+      "longitude": 8.213143,
+      "elevation": 941.706931,
+      "time": "2026-01-01T00:00:56.000Z"
+    },
+    {
+      "latitude": 46.819019,
+      "longitude": 8.213469,
+      "elevation": 948.759073,
+      "time": "2026-01-01T00:00:57.000Z"
+    },
+    {
+      "latitude": 46.818396,
+      "longitude": 8.213931,
+      "elevation": 956.269251,
+      "time": "2026-01-01T00:00:58.000Z"
+    },
+    {
+      "latitude": 46.817776,
+      "longitude": 8.214566,
+      "elevation": 962.560716,
+      "time": "2026-01-01T00:00:59.000Z"
+    },
+    {
+      "latitude": 46.817414,
+      "longitude": 8.215155,
+      "elevation": 966.846078,
+      "time": "2026-01-01T00:01:00.000Z"
+    },
+    {
+      "latitude": 46.816863,
+      "longitude": 8.215504,
+      "elevation": 972.619371,
+      "time": "2026-01-01T00:01:01.000Z"
+    },
+    {
+      "latitude": 46.816697,
+      "longitude": 8.215529,
+      "elevation": 975.852646,
+      "time": "2026-01-01T00:01:02.000Z"
+    },
+    {
+      "latitude": 46.815779,
+      "longitude": 8.215933,
+      "elevation": 982.351968,
+      "time": "2026-01-01T00:01:03.000Z"
+    },
+    {
+      "latitude": 46.814832,
+      "longitude": 8.215936,
+      "elevation": 993.837407,
+      "time": "2026-01-01T00:01:04.000Z"
+    },
+    {
+      "latitude": 46.814053,
+      "longitude": 8.215798,
+      "elevation": 1001.872731,
+      "time": "2026-01-01T00:01:05.000Z"
+    },
+    {
+      "latitude": 46.813191,
+      "longitude": 8.216036,
+      "elevation": 1010.169688,
+      "time": "2026-01-01T00:01:06.000Z"
+    },
+    {
+      "latitude": 46.812519,
+      "longitude": 8.216576,
+      "elevation": 1015.816073,
+      "time": "2026-01-01T00:01:07.000Z"
+    },
+    {
+      "latitude": 46.81233,
+      "longitude": 8.216731,
+      "elevation": 1015.907815,
+      "time": "2026-01-01T00:01:08.000Z"
+    },
+    {
+      "latitude": 46.811899,
+      "longitude": 8.21681,
+      "elevation": 1019.39172,
+      "time": "2026-01-01T00:01:09.000Z"
+    },
+    {
+      "latitude": 46.811531,
+      "longitude": 8.216738,
+      "elevation": 1023.558596,
+      "time": "2026-01-01T00:01:10.000Z"
+    },
+    {
+      "latitude": 46.811568,
+      "longitude": 8.216784,
+      "elevation": 1021.838853,
+      "time": "2026-01-01T00:01:11.000Z"
+    },
+    {
+      "latitude": 46.810804,
+      "longitude": 8.216682,
+      "elevation": 1030.416239,
+      "time": "2026-01-01T00:01:12.000Z"
+    },
+    {
+      "latitude": 46.811638,
+      "longitude": 8.216745,
+      "elevation": 1023.082078,
+      "time": "2026-01-01T00:01:13.000Z"
+    },
+    {
+      "latitude": 46.811638,
+      "longitude": 8.21676,
+      "elevation": 1020.867642,
+      "time": "2026-01-01T00:01:14.000Z"
+    },
+    {
+      "latitude": 46.811345,
+      "longitude": 8.216915,
+      "elevation": 1029.973426,
+      "time": "2026-01-01T00:01:15.000Z"
+    },
+    {
+      "latitude": 46.810896,
+      "longitude": 8.217188,
+      "elevation": 1052.788023,
+      "time": "2026-01-01T00:01:16.000Z"
+    },
+    {
+      "latitude": 46.810477,
+      "longitude": 8.217168,
+      "elevation": 1074.294686,
+      "time": "2026-01-01T00:01:17.000Z"
+    },
+    {
+      "latitude": 46.810161,
+      "longitude": 8.217263,
+      "elevation": 1088.998392,
+      "time": "2026-01-01T00:01:18.000Z"
+    },
+    {
+      "latitude": 46.810135,
+      "longitude": 8.217857,
+      "elevation": 1107.255171,
+      "time": "2026-01-01T00:01:19.000Z"
+    },
+    {
+      "latitude": 46.810244,
+      "longitude": 8.218121,
+      "elevation": 1118.989563,
+      "time": "2026-01-01T00:01:20.000Z"
+    },
+    {
+      "latitude": 46.810123,
+      "longitude": 8.21787,
+      "elevation": 1107.291237,
+      "time": "2026-01-01T00:01:21.000Z"
+    },
+    {
+      "latitude": 46.810266,
+      "longitude": 8.217189,
+      "elevation": 1082.758158,
+      "time": "2026-01-01T00:01:22.000Z"
+    },
+    {
+      "latitude": 46.810842,
+      "longitude": 8.217143,
+      "elevation": 1056.23534,
+      "time": "2026-01-01T00:01:23.000Z"
+    },
+    {
+      "latitude": 46.81123,
+      "longitude": 8.216778,
+      "elevation": 1033.078536,
+      "time": "2026-01-01T00:01:24.000Z"
+    },
+    {
+      "latitude": 46.811629,
+      "longitude": 8.216655,
+      "elevation": 1020.097602,
+      "time": "2026-01-01T00:01:25.000Z"
+    },
+    {
+      "latitude": 46.811577,
+      "longitude": 8.21657,
+      "elevation": 1015.037619,
+      "time": "2026-01-01T00:01:26.000Z"
+    },
+    {
+      "latitude": 46.811581,
+      "longitude": 8.216677,
+      "elevation": 1013.584408,
+      "time": "2026-01-01T00:01:27.000Z"
+    },
+    {
+      "latitude": 46.811857,
+      "longitude": 8.216366,
+      "elevation": 1008.860364,
+      "time": "2026-01-01T00:01:28.000Z"
+    },
+    {
+      "latitude": 46.811862,
+      "longitude": 8.216315,
+      "elevation": 1008.500398,
+      "time": "2026-01-01T00:01:29.000Z"
+    },
+    {
+      "latitude": 46.811963,
+      "longitude": 8.21621,
+      "elevation": 1005.701939,
+      "time": "2026-01-01T00:01:30.000Z"
+    },
+    {
+      "latitude": 46.811955,
+      "longitude": 8.216271,
+      "elevation": 1004.514098,
+      "time": "2026-01-01T00:01:31.000Z"
+    },
+    {
+      "latitude": 46.811892,
+      "longitude": 8.216252,
+      "elevation": 1003.551212,
+      "time": "2026-01-01T00:01:32.000Z"
+    },
+    {
+      "latitude": 46.81187,
+      "longitude": 8.216475,
+      "elevation": 1001.119284,
+      "time": "2026-01-01T00:01:33.000Z"
+    },
+    {
+      "latitude": 46.811798,
+      "longitude": 8.216514,
+      "elevation": 1002.153449,
+      "time": "2026-01-01T00:01:34.000Z"
+    },
+    {
+      "latitude": 46.811585,
+      "longitude": 8.216551,
+      "elevation": 1005.406248,
+      "time": "2026-01-01T00:01:35.000Z"
+    },
+    {
+      "latitude": 46.811609,
+      "longitude": 8.216635,
+      "elevation": 1008.51775,
+      "time": "2026-01-01T00:01:36.000Z"
+    },
+    {
+      "latitude": 46.811662,
+      "longitude": 8.216723,
+      "elevation": 1008.286586,
+      "time": "2026-01-01T00:01:37.000Z"
+    },
+    {
+      "latitude": 46.811641,
+      "longitude": 8.216721,
+      "elevation": 1007.889734,
+      "time": "2026-01-01T00:01:38.000Z"
+    },
+    {
+      "latitude": 46.811649,
+      "longitude": 8.216696,
+      "elevation": 1007.620231,
+      "time": "2026-01-01T00:01:39.000Z"
+    },
+    {
+      "latitude": 46.81152,
+      "longitude": 8.21678,
+      "elevation": 1008.732893,
+      "time": "2026-01-01T00:01:40.000Z"
+    },
+    {
+      "latitude": 46.810743,
+      "longitude": 8.216725,
+      "elevation": 1019.542357,
+      "time": "2026-01-01T00:01:41.000Z"
+    },
+    {
+      "latitude": 46.810203,
+      "longitude": 8.216292,
+      "elevation": 1030.859636,
+      "time": "2026-01-01T00:01:42.000Z"
+    },
+    {
+      "latitude": 46.810228,
+      "longitude": 8.216099,
+      "elevation": 1038.261654,
+      "time": "2026-01-01T00:01:43.000Z"
+    },
+    {
+      "latitude": 46.810111,
+      "longitude": 8.215951,
+      "elevation": 1050.112448,
+      "time": "2026-01-01T00:01:44.000Z"
+    },
+    {
+      "latitude": 46.809858,
+      "longitude": 8.215836,
+      "elevation": 1061.285521,
+      "time": "2026-01-01T00:01:45.000Z"
+    },
+    {
+      "latitude": 46.809684,
+      "longitude": 8.21597,
+      "elevation": 1072.805633,
+      "time": "2026-01-01T00:01:46.000Z"
+    },
+    {
+      "latitude": 46.809582,
+      "longitude": 8.215718,
+      "elevation": 1082.9675,
+      "time": "2026-01-01T00:01:47.000Z"
+    },
+    {
+      "latitude": 46.809473,
+      "longitude": 8.215614,
+      "elevation": 1091.661058,
+      "time": "2026-01-01T00:01:48.000Z"
+    },
+    {
+      "latitude": 46.809461,
+      "longitude": 8.2152,
+      "elevation": 1105.026642,
+      "time": "2026-01-01T00:01:49.000Z"
+    },
+    {
+      "latitude": 46.809179,
+      "longitude": 8.215318,
+      "elevation": 1118.166129,
+      "time": "2026-01-01T00:01:50.000Z"
+    },
+    {
+      "latitude": 46.809003,
+      "longitude": 8.215015,
+      "elevation": 1127.154064,
+      "time": "2026-01-01T00:01:51.000Z"
+    },
+    {
+      "latitude": 46.808871,
+      "longitude": 8.214917,
+      "elevation": 1130.883024,
+      "time": "2026-01-01T00:01:52.000Z"
+    },
+    {
+      "latitude": 46.808861,
+      "longitude": 8.214896,
+      "elevation": 1130.723272,
+      "time": "2026-01-01T00:01:53.000Z"
+    },
+    {
+      "latitude": 46.808919,
+      "longitude": 8.214971,
+      "elevation": 1127.991628,
+      "time": "2026-01-01T00:01:54.000Z"
+    },
+    {
+      "latitude": 46.80888,
+      "longitude": 8.215029,
+      "elevation": 1128.761211,
+      "time": "2026-01-01T00:01:55.000Z"
+    },
+    {
+      "latitude": 46.808794,
+      "longitude": 8.214719,
+      "elevation": 1136.628635,
+      "time": "2026-01-01T00:01:56.000Z"
+    },
+    {
+      "latitude": 46.808716,
+      "longitude": 8.214401,
+      "elevation": 1146.303864,
+      "time": "2026-01-01T00:01:57.000Z"
+    },
+    {
+      "latitude": 46.808626,
+      "longitude": 8.214021,
+      "elevation": 1158.926908,
+      "time": "2026-01-01T00:01:58.000Z"
+    },
+    {
+      "latitude": 46.808467,
+      "longitude": 8.213683,
+      "elevation": 1170.7472,
+      "time": "2026-01-01T00:01:59.000Z"
+    },
+    {
+      "latitude": 46.808165,
+      "longitude": 8.213478,
+      "elevation": 1180.30804,
+      "time": "2026-01-01T00:02:00.000Z"
+    },
+    {
+      "latitude": 46.80823,
+      "longitude": 8.213455,
+      "elevation": 1180.941665,
+      "time": "2026-01-01T00:02:01.000Z"
+    },
+    {
+      "latitude": 46.808212,
+      "longitude": 8.213396,
+      "elevation": 1181.904476,
+      "time": "2026-01-01T00:02:02.000Z"
+    },
+    {
+      "latitude": 46.808286,
+      "longitude": 8.212736,
+      "elevation": 1186.160488,
+      "time": "2026-01-01T00:02:03.000Z"
+    },
+    {
+      "latitude": 46.807633,
+      "longitude": 8.212424,
+      "elevation": 1192.84166,
+      "time": "2026-01-01T00:02:04.000Z"
+    },
+    {
+      "latitude": 46.807185,
+      "longitude": 8.21215,
+      "elevation": 1198.773519,
+      "time": "2026-01-01T00:02:05.000Z"
+    },
+    {
+      "latitude": 46.806793,
+      "longitude": 8.211724,
+      "elevation": 1208.720977,
+      "time": "2026-01-01T00:02:06.000Z"
+    },
+    {
+      "latitude": 46.80642,
+      "longitude": 8.21169,
+      "elevation": 1219.555923,
+      "time": "2026-01-01T00:02:07.000Z"
+    },
+    {
+      "latitude": 46.80643,
+      "longitude": 8.211482,
+      "elevation": 1223.42679,
+      "time": "2026-01-01T00:02:08.000Z"
+    },
+    {
+      "latitude": 46.80639,
+      "longitude": 8.211322,
+      "elevation": 1224.631376,
+      "time": "2026-01-01T00:02:09.000Z"
+    },
+    {
+      "latitude": 46.806235,
+      "longitude": 8.210688,
+      "elevation": 1235.921022,
+      "time": "2026-01-01T00:02:10.000Z"
+    },
+    {
+      "latitude": 46.806615,
+      "longitude": 8.210442,
+      "elevation": 1246.924086,
+      "time": "2026-01-01T00:02:11.000Z"
+    },
+    {
+      "latitude": 46.806105,
+      "longitude": 8.209968,
+      "elevation": 1260.611907,
+      "time": "2026-01-01T00:02:12.000Z"
+    },
+    {
+      "latitude": 46.805926,
+      "longitude": 8.20963,
+      "elevation": 1269.889615,
+      "time": "2026-01-01T00:02:13.000Z"
+    },
+    {
+      "latitude": 46.806613,
+      "longitude": 8.209788,
+      "elevation": 1270.511853,
+      "time": "2026-01-01T00:02:14.000Z"
+    },
+    {
+      "latitude": 46.807556,
+      "longitude": 8.210204,
+      "elevation": 1269.109249,
+      "time": "2026-01-01T00:02:15.000Z"
+    },
+    {
+      "latitude": 46.808207,
+      "longitude": 8.210911,
+      "elevation": 1267.968024,
+      "time": "2026-01-01T00:02:16.000Z"
+    },
+    {
+      "latitude": 46.809192,
+      "longitude": 8.211609,
+      "elevation": 1267.451144,
+      "time": "2026-01-01T00:02:17.000Z"
+    },
+    {
+      "latitude": 46.809894,
+      "longitude": 8.211886,
+      "elevation": 1268.006338,
+      "time": "2026-01-01T00:02:18.000Z"
+    },
+    {
+      "latitude": 46.810765,
+      "longitude": 8.212053,
+      "elevation": 1270.055802,
+      "time": "2026-01-01T00:02:19.000Z"
+    },
+    {
+      "latitude": 46.811615,
+      "longitude": 8.211296,
+      "elevation": 1274.639416,
+      "time": "2026-01-01T00:02:20.000Z"
+    },
+    {
+      "latitude": 46.811997,
+      "longitude": 8.210158,
+      "elevation": 1276.222217,
+      "time": "2026-01-01T00:02:21.000Z"
+    },
+    {
+      "latitude": 46.812175,
+      "longitude": 8.208908,
+      "elevation": 1276.989123,
+      "time": "2026-01-01T00:02:22.000Z"
+    },
+    {
+      "latitude": 46.812344,
+      "longitude": 8.208502,
+      "elevation": 1275.845822,
+      "time": "2026-01-01T00:02:23.000Z"
+    },
+    {
+      "latitude": 46.812274,
+      "longitude": 8.208512,
+      "elevation": 1273.152059,
+      "time": "2026-01-01T00:02:24.000Z"
+    },
+    {
+      "latitude": 46.812335,
+      "longitude": 8.208507,
+      "elevation": 1272.335447,
+      "time": "2026-01-01T00:02:25.000Z"
+    },
+    {
+      "latitude": 46.812279,
+      "longitude": 8.208468,
+      "elevation": 1271.000191,
+      "time": "2026-01-01T00:02:26.000Z"
+    },
+    {
+      "latitude": 46.81228,
+      "longitude": 8.208541,
+      "elevation": 1270.347948,
+      "time": "2026-01-01T00:02:27.000Z"
+    },
+    {
+      "latitude": 46.812248,
+      "longitude": 8.208483,
+      "elevation": 1270.40219,
+      "time": "2026-01-01T00:02:28.000Z"
+    },
+    {
+      "latitude": 46.812229,
+      "longitude": 8.208513,
+      "elevation": 1270.748605,
+      "time": "2026-01-01T00:02:29.000Z"
+    },
+    {
+      "latitude": 46.812374,
+      "longitude": 8.208727,
+      "elevation": 1271.208055,
+      "time": "2026-01-01T00:02:30.000Z"
+    },
+    {
+      "latitude": 46.812773,
+      "longitude": 8.209208,
+      "elevation": 1274.279819,
+      "time": "2026-01-01T00:02:31.000Z"
+    },
+    {
+      "latitude": 46.813737,
+      "longitude": 8.209897,
+      "elevation": 1276.79785,
+      "time": "2026-01-01T00:02:32.000Z"
+    },
+    {
+      "latitude": 46.814444,
+      "longitude": 8.210329,
+      "elevation": 1278.475163,
+      "time": "2026-01-01T00:02:33.000Z"
+    },
+    {
+      "latitude": 46.815361,
+      "longitude": 8.210576,
+      "elevation": 1279.895439,
+      "time": "2026-01-01T00:02:34.000Z"
+    },
+    {
+      "latitude": 46.816376,
+      "longitude": 8.209513,
+      "elevation": 1282.780273,
+      "time": "2026-01-01T00:02:35.000Z"
+    },
+    {
+      "latitude": 46.81719,
+      "longitude": 8.20844,
+      "elevation": 1282.779961,
+      "time": "2026-01-01T00:02:36.000Z"
+    },
+    {
+      "latitude": 46.818298,
+      "longitude": 8.20774,
+      "elevation": 1283.132224,
+      "time": "2026-01-01T00:02:37.000Z"
+    },
+    {
+      "latitude": 46.818669,
+      "longitude": 8.207453,
+      "elevation": 1283.014547,
+      "time": "2026-01-01T00:02:38.000Z"
+    },
+    {
+      "latitude": 46.818711,
+      "longitude": 8.207304,
+      "elevation": 1283.559594,
+      "time": "2026-01-01T00:02:39.000Z"
+    },
+    {
+      "latitude": 46.819677,
+      "longitude": 8.206461,
+      "elevation": 1285.261446,
+      "time": "2026-01-01T00:02:40.000Z"
+    },
+    {
+      "latitude": 46.820925,
+      "longitude": 8.205942,
+      "elevation": 1284.278215,
+      "time": "2026-01-01T00:02:41.000Z"
+    },
+    {
+      "latitude": 46.821751,
+      "longitude": 8.204993,
+      "elevation": 1283.041962,
+      "time": "2026-01-01T00:02:42.000Z"
+    },
+    {
+      "latitude": 46.822325,
+      "longitude": 8.204651,
+      "elevation": 1280.489631,
+      "time": "2026-01-01T00:02:43.000Z"
+    },
+    {
+      "latitude": 46.823111,
+      "longitude": 8.204661,
+      "elevation": 1280.687181,
+      "time": "2026-01-01T00:02:44.000Z"
+    },
+    {
+      "latitude": 46.82375,
+      "longitude": 8.203804,
+      "elevation": 1276.848684,
+      "time": "2026-01-01T00:02:45.000Z"
+    },
+    {
+      "latitude": 46.824634,
+      "longitude": 8.203372,
+      "elevation": 1271.551462,
+      "time": "2026-01-01T00:02:46.000Z"
+    },
+    {
+      "latitude": 46.825198,
+      "longitude": 8.202361,
+      "elevation": 1266.116243,
+      "time": "2026-01-01T00:02:47.000Z"
+    },
+    {
+      "latitude": 46.825347,
+      "longitude": 8.201729,
+      "elevation": 1259.791763,
+      "time": "2026-01-01T00:02:48.000Z"
+    },
+    {
+      "latitude": 46.825954,
+      "longitude": 8.201216,
+      "elevation": 1252.628907,
+      "time": "2026-01-01T00:02:49.000Z"
+    },
+    {
+      "latitude": 46.826086,
+      "longitude": 8.200854,
+      "elevation": 1247.613956,
+      "time": "2026-01-01T00:02:50.000Z"
+    },
+    {
+      "latitude": 46.826054,
+      "longitude": 8.199573,
+      "elevation": 1232.038655,
+      "time": "2026-01-01T00:02:51.000Z"
+    },
+    {
+      "latitude": 46.826857,
+      "longitude": 8.199522,
+      "elevation": 1213.787113,
+      "time": "2026-01-01T00:02:52.000Z"
+    },
+    {
+      "latitude": 46.826859,
+      "longitude": 8.19936,
+      "elevation": 1207.31515,
+      "time": "2026-01-01T00:02:53.000Z"
+    },
+    {
+      "latitude": 46.826692,
+      "longitude": 8.199095,
+      "elevation": 1206.57085,
+      "time": "2026-01-01T00:02:54.000Z"
+    },
+    {
+      "latitude": 46.826924,
+      "longitude": 8.199501,
+      "elevation": 1210.198347,
+      "time": "2026-01-01T00:02:55.000Z"
+    },
+    {
+      "latitude": 46.827166,
+      "longitude": 8.199493,
+      "elevation": 1202.729307,
+      "time": "2026-01-01T00:02:56.000Z"
+    },
+    {
+      "latitude": 46.827443,
+      "longitude": 8.199555,
+      "elevation": 1189.181926,
+      "time": "2026-01-01T00:02:57.000Z"
+    },
+    {
+      "latitude": 46.827648,
+      "longitude": 8.199652,
+      "elevation": 1171.037027,
+      "time": "2026-01-01T00:02:58.000Z"
+    },
+    {
+      "latitude": 46.827945,
+      "longitude": 8.19934,
+      "elevation": 1153.128399,
+      "time": "2026-01-01T00:02:59.000Z"
+    },
+    {
+      "latitude": 46.828266,
+      "longitude": 8.199155,
+      "elevation": 1132.249632,
+      "time": "2026-01-01T00:03:00.000Z"
+    },
+    {
+      "latitude": 46.828614,
+      "longitude": 8.199025,
+      "elevation": 1113.176459,
+      "time": "2026-01-01T00:03:01.000Z"
+    },
+    {
+      "latitude": 46.829245,
+      "longitude": 8.198973,
+      "elevation": 1087.104802,
+      "time": "2026-01-01T00:03:02.000Z"
+    },
+    {
+      "latitude": 46.829749,
+      "longitude": 8.199391,
+      "elevation": 1064.227342,
+      "time": "2026-01-01T00:03:03.000Z"
+    },
+    {
+      "latitude": 46.830174,
+      "longitude": 8.199442,
+      "elevation": 1049.077316,
+      "time": "2026-01-01T00:03:04.000Z"
+    },
+    {
+      "latitude": 46.830566,
+      "longitude": 8.199456,
+      "elevation": 1035.246217,
+      "time": "2026-01-01T00:03:05.000Z"
+    },
+    {
+      "latitude": 46.830709,
+      "longitude": 8.199603,
+      "elevation": 1028.831414,
+      "time": "2026-01-01T00:03:06.000Z"
+    },
+    {
+      "latitude": 46.830708,
+      "longitude": 8.200185,
+      "elevation": 1013.707392,
+      "time": "2026-01-01T00:03:07.000Z"
+    },
+    {
+      "latitude": 46.831224,
+      "longitude": 8.200296,
+      "elevation": 997.094585,
+      "time": "2026-01-01T00:03:08.000Z"
+    },
+    {
+      "latitude": 46.831398,
+      "longitude": 8.200158,
+      "elevation": 975.532447,
+      "time": "2026-01-01T00:03:09.000Z"
+    },
+    {
+      "latitude": 46.831908,
+      "longitude": 8.199776,
+      "elevation": 952.594636,
+      "time": "2026-01-01T00:03:10.000Z"
+    },
+    {
+      "latitude": 46.832158,
+      "longitude": 8.200132,
+      "elevation": 933.669884,
+      "time": "2026-01-01T00:03:11.000Z"
+    },
+    {
+      "latitude": 46.832443,
+      "longitude": 8.200256,
+      "elevation": 914.498597,
+      "time": "2026-01-01T00:03:12.000Z"
+    },
+    {
+      "latitude": 46.832635,
+      "longitude": 8.199926,
+      "elevation": 899.832515,
+      "time": "2026-01-01T00:03:13.000Z"
+    },
+    {
+      "latitude": 46.832617,
+      "longitude": 8.198848,
+      "elevation": 880.123464,
+      "time": "2026-01-01T00:03:14.000Z"
+    },
+    {
+      "latitude": 46.83245,
+      "longitude": 8.198012,
+      "elevation": 864.07417,
+      "time": "2026-01-01T00:03:15.000Z"
+    },
+    {
+      "latitude": 46.832044,
+      "longitude": 8.197101,
+      "elevation": 845.286148,
+      "time": "2026-01-01T00:03:16.000Z"
+    },
+    {
+      "latitude": 46.831735,
+      "longitude": 8.196168,
+      "elevation": 831.379493,
+      "time": "2026-01-01T00:03:17.000Z"
+    },
+    {
+      "latitude": 46.831649,
+      "longitude": 8.195887,
+      "elevation": 827.518806,
+      "time": "2026-01-01T00:03:18.000Z"
+    },
+    {
+      "latitude": 46.831806,
+      "longitude": 8.195887,
+      "elevation": 825.948536,
+      "time": "2026-01-01T00:03:19.000Z"
+    },
+    {
+      "latitude": 46.832048,
+      "longitude": 8.195995,
+      "elevation": 826.279108,
+      "time": "2026-01-01T00:03:20.000Z"
+    },
+    {
+      "latitude": 46.83181,
+      "longitude": 8.195911,
+      "elevation": 826.55014,
+      "time": "2026-01-01T00:03:21.000Z"
+    },
+    {
+      "latitude": 46.83168,
+      "longitude": 8.195923,
+      "elevation": 829.1185,
+      "time": "2026-01-01T00:03:22.000Z"
+    },
+    {
+      "latitude": 46.831872,
+      "longitude": 8.195944,
+      "elevation": 828.76506,
+      "time": "2026-01-01T00:03:23.000Z"
+    },
+    {
+      "latitude": 46.83233,
+      "longitude": 8.195439,
+      "elevation": 813.818806,
+      "time": "2026-01-01T00:03:24.000Z"
+    },
+    {
+      "latitude": 46.832781,
+      "longitude": 8.194484,
+      "elevation": 794.139077,
+      "time": "2026-01-01T00:03:25.000Z"
+    },
+    {
+      "latitude": 46.833644,
+      "longitude": 8.193491,
+      "elevation": 777.730392,
+      "time": "2026-01-01T00:03:26.000Z"
+    },
+    {
+      "latitude": 46.833995,
+      "longitude": 8.192865,
+      "elevation": 761.332754,
+      "time": "2026-01-01T00:03:27.000Z"
+    },
+    {
+      "latitude": 46.833937,
+      "longitude": 8.192755,
+      "elevation": 754.222023,
+      "time": "2026-01-01T00:03:28.000Z"
+    },
+    {
+      "latitude": 46.833621,
+      "longitude": 8.191798,
+      "elevation": 740.450433,
+      "time": "2026-01-01T00:03:29.000Z"
+    },
+    {
+      "latitude": 46.833841,
+      "longitude": 8.191171,
+      "elevation": 731.89966,
+      "time": "2026-01-01T00:03:30.000Z"
+    },
+    {
+      "latitude": 46.834324,
+      "longitude": 8.1911,
+      "elevation": 724.332513,
+      "time": "2026-01-01T00:03:31.000Z"
+    },
+    {
+      "latitude": 46.834645,
+      "longitude": 8.190989,
+      "elevation": 708.180938,
+      "time": "2026-01-01T00:03:32.000Z"
+    },
+    {
+      "latitude": 46.834888,
+      "longitude": 8.190341,
+      "elevation": 690.236591,
+      "time": "2026-01-01T00:03:33.000Z"
+    },
+    {
+      "latitude": 46.834798,
+      "longitude": 8.190036,
+      "elevation": 685.488555,
+      "time": "2026-01-01T00:03:34.000Z"
+    },
+    {
+      "latitude": 46.83505,
+      "longitude": 8.189728,
+      "elevation": 672.503226,
+      "time": "2026-01-01T00:03:35.000Z"
+    },
+    {
+      "latitude": 46.835386,
+      "longitude": 8.189718,
+      "elevation": 656.481237,
+      "time": "2026-01-01T00:03:36.000Z"
+    },
+    {
+      "latitude": 46.835517,
+      "longitude": 8.18902,
+      "elevation": 635.678698,
+      "time": "2026-01-01T00:03:37.000Z"
+    },
+    {
+      "latitude": 46.835605,
+      "longitude": 8.188344,
+      "elevation": 616.302435,
+      "time": "2026-01-01T00:03:38.000Z"
+    },
+    {
+      "latitude": 46.835343,
+      "longitude": 8.187053,
+      "elevation": 596.55105,
+      "time": "2026-01-01T00:03:39.000Z"
+    },
+    {
+      "latitude": 46.834602,
+      "longitude": 8.186276,
+      "elevation": 574.89397,
+      "time": "2026-01-01T00:03:40.000Z"
+    },
+    {
+      "latitude": 46.834456,
+      "longitude": 8.185719,
+      "elevation": 555.43666,
+      "time": "2026-01-01T00:03:41.000Z"
+    },
+    {
+      "latitude": 46.835163,
+      "longitude": 8.185905,
+      "elevation": 542.168115,
+      "time": "2026-01-01T00:03:42.000Z"
+    },
+    {
+      "latitude": 46.836249,
+      "longitude": 8.186938,
+      "elevation": 536.652424,
+      "time": "2026-01-01T00:03:43.000Z"
+    },
+    {
+      "latitude": 46.837167,
+      "longitude": 8.1874,
+      "elevation": 536.911647,
+      "time": "2026-01-01T00:03:44.000Z"
+    },
+    {
+      "latitude": 46.83743,
+      "longitude": 8.187585,
+      "elevation": 533.025258,
+      "time": "2026-01-01T00:03:45.000Z"
+    },
+    {
+      "latitude": 46.837433,
+      "longitude": 8.187607,
+      "elevation": 528.489283,
+      "time": "2026-01-01T00:03:46.000Z"
+    },
+    {
+      "latitude": 46.836832,
+      "longitude": 8.187249,
+      "elevation": 532.083928,
+      "time": "2026-01-01T00:03:47.000Z"
+    },
+    {
+      "latitude": 46.836731,
+      "longitude": 8.186477,
+      "elevation": 532.942968,
+      "time": "2026-01-01T00:03:48.000Z"
+    },
+    {
+      "latitude": 46.836531,
+      "longitude": 8.186348,
+      "elevation": 535.368533,
+      "time": "2026-01-01T00:03:49.000Z"
+    },
+    {
+      "latitude": 46.8368,
+      "longitude": 8.186369,
+      "elevation": 536.170271,
+      "time": "2026-01-01T00:03:50.000Z"
+    },
+    {
+      "latitude": 46.836946,
+      "longitude": 8.186595,
+      "elevation": 532.938765,
+      "time": "2026-01-01T00:03:51.000Z"
+    },
+    {
+      "latitude": 46.836652,
+      "longitude": 8.187117,
+      "elevation": 533.907481,
+      "time": "2026-01-01T00:03:52.000Z"
+    },
+    {
+      "latitude": 46.836955,
+      "longitude": 8.187252,
+      "elevation": 537.763679,
+      "time": "2026-01-01T00:03:53.000Z"
+    },
+    {
+      "latitude": 46.837358,
+      "longitude": 8.187545,
+      "elevation": 537.16829,
+      "time": "2026-01-01T00:03:54.000Z"
+    },
+    {
+      "latitude": 46.837358,
+      "longitude": 8.187545,
+      "elevation": 536.737135,
+      "time": "2026-01-01T00:03:55.000Z"
+    },
+    {
+      "latitude": 46.837348,
+      "longitude": 8.187427,
+      "elevation": 536.598103,
+      "time": "2026-01-01T00:03:56.000Z"
+    },
+    {
+      "latitude": 46.837363,
+      "longitude": 8.187414,
+      "elevation": 536.466487,
+      "time": "2026-01-01T00:03:57.000Z"
+    },
+    {
+      "latitude": 46.838057,
+      "longitude": 8.189181,
+      "elevation": 539.194202,
+      "time": "2026-01-01T00:03:58.000Z"
+    },
+    {
+      "latitude": 46.839491,
+      "longitude": 8.1913,
+      "elevation": 543.740078,
+      "time": "2026-01-01T00:03:59.000Z"
+    }
+  ]
+}

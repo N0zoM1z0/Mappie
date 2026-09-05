@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { pointsToPath, projectTracks } from "../src/core/projection";
-import { demoTrack } from "../src/data/demoTrack";
+import { demoRoutes, demoTrack } from "../src/data/demoTrack";
 
 describe("blank-map projection", () => {
   it("fits all public trace points inside the requested viewport", () => {
@@ -20,5 +20,18 @@ describe("blank-map projection", () => {
         { x: 3.5, y: 4 },
       ]),
     ).toBe("M 1.00 2.00 L 3.50 4.00");
+  });
+
+  it("fits every public fixture at a phone-sized viewport", () => {
+    for (const { track } of demoRoutes) {
+      const result = projectTracks([track], 390, 480, 30);
+      const points = result.tracks[0]!.points;
+      expect(points.every((point) => point.x >= 30 && point.x <= 360)).toBe(
+        true,
+      );
+      expect(points.every((point) => point.y >= 30 && point.y <= 450)).toBe(
+        true,
+      );
+    }
   });
 });

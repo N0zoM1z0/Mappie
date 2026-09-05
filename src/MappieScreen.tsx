@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Linking,
   Platform,
   Pressable,
   StyleSheet,
@@ -12,6 +13,9 @@ import {
 import * as DocumentPicker from "expo-document-picker";
 import { File as ExpoFile } from "expo-file-system";
 import {
+  ArrowUp,
+  ChevronLeft,
+  ChevronRight,
   CircleStop,
   Crosshair,
   LocateFixed,
@@ -27,11 +31,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { IconButton } from "./components/IconButton";
-import { MapCanvas } from "./components/MapCanvas";
-import { trackDistance } from "./core/geo";
+import { MapCanvas, type MapMarker } from "./components/MapCanvas";
+import { haversineDistance, trackDistance } from "./core/geo";
 import { parseGPX } from "./core/gpx";
 import type { Track } from "./core/types";
-import { demoTrack } from "./data/demoTrack";
+import { demoRoutes } from "./data/demoTrack";
 import { useExploration } from "./state/useExploration";
 import { colors } from "./theme";
 
@@ -51,6 +55,21 @@ function readout(
   return `${Math.abs(value).toFixed(5)} ${value >= 0 ? positive : negative}`;
 }
 
+function bearingBetween(
+  from: { latitude: number; longitude: number } | undefined,
+  to: { latitude: number; longitude: number } | undefined,
+): number {
+  if (!from || !to) return 0;
+  const latitude1 = (from.latitude * Math.PI) / 180;
+  const latitude2 = (to.latitude * Math.PI) / 180;
+  const longitudeDelta = ((to.longitude - from.longitude) * Math.PI) / 180;
+  const y = Math.sin(longitudeDelta) * Math.cos(latitude2);
+  const x =
+    Math.cos(latitude1) * Math.sin(latitude2) -
+    Math.sin(latitude1) * Math.cos(latitude2) * Math.cos(longitudeDelta);
+  return (Math.atan2(y, x) * 180) / Math.PI;
+}
+
 export function MappieScreen() {
   const { width } = useWindowDimensions();
   const compact = width < 560;
@@ -66,8 +85,16 @@ export function MappieScreen() {
     tracks,
   } = useExploration();
   const [mode, setMode] = useState<ViewMode>("demo");
+  const [routeIndex, setRouteIndex] = useState(0);
   const [replayProgress, setReplayProgress] = useState(0);
   const [playing, setPlaying] = useState(true);
+  const [resolvedDiscoveries, setResolvedDiscoveries] = useState<string[]>([]);
+  const [triggeredDiscoveries, setTriggeredDiscoveries] = useState<string[]>(
+    [],
+  );
+  const [demoNotice, setDemoNotice] = useState(
+    "TARGET LOCKED / Explore the line before opening the objective.",
+  );
   const [importing, setImporting] = useState(false);
   const [resetKey, setResetKey] = useState(0);
   const [zoomCommand, setZoomCommand] = useState<{
@@ -77,17 +104,38 @@ export function MappieScreen() {
     id: 0,
     direction: "in",
   });
+  const demoRoute = demoRoutes[routeIndex]!;
+  const demoTrack = demoRoute.track;
 
   useEffect(() => {
     if (!playing || mode !== "demo") return;
     const timer = setInterval(() => {
-      setReplayProgress((current) => Math.min(1, current + 0.006));
+      setReplayProgress((current) => Math.min(1, current + 0.003));
     }, 32);
     return () => clearInterval(timer);
   }, [mode, playing]);
 
   useEffect(() => {
-    if (replayProgress >= 1) setPlaying(false);
+    if (mode !== "demo" || !playing) return;
+    const discovery = demoRoute.discoveries.find(
+      (candidate) =>
+        replayProgress >= candidate.progress &&
+        !triggeredDiscoveries.includes(candidate.id),
+    );
+    if (!discovery) return;
+    setTriggeredDiscoveries((current) => [...current, discovery.id]);
+    setDemoNotice(
+      `${discovery.kind === "friend" ? "PERSON DETECTED" : "UNKNOWN SIGNAL"} / Open it or continue toward !`,
+    );
+    setPlaying(false);
+  }, [demoRoute, mode, playing, replayProgress, triggeredDiscoveries]);
+
+  useEffect(() => {
+    if (replayProgress < 1) return;
+    setPlaying(false);
+    setDemoNotice(
+      "TARGET REACHED / Route complete. Unopened signals remain optional.",
+    );
   }, [replayProgress]);
 
   const replayTrack = useMemo<Track>(() => {
@@ -96,7 +144,7 @@ export function MappieScreen() {
       Math.ceil(demoTrack.points.length * replayProgress),
     );
     return { ...demoTrack, points: demoTrack.points.slice(0, visibleCount) };
-  }, [replayProgress]);
+  }, [demoTrack, replayProgress]);
   const personalTracks = useMemo(
     () => [...tracks, ...(activeTrack ? [activeTrack] : [])],
     [activeTrack, tracks],
@@ -104,6 +152,7 @@ export function MappieScreen() {
   const displayedTracks = mode === "demo" ? [replayTrack] : personalTracks;
   const points = displayedTracks.flatMap((track) => track.points);
   const latestPoint = points.at(-1);
+  const targetPoint = mode === "demo" ? demoTrack.points.at(-1) : undefined;
   const distance = displayedTracks.reduce(
     (total, track) => total + trackDistance(track.points),
     0,
@@ -111,17 +160,109 @@ export function MappieScreen() {
   const trackCount = displayedTracks.filter(
     (track) => track.points.length > 0,
   ).length;
+  const routeMemoryCount = demoRoute.discoveries.filter((discovery) =>
+    resolvedDiscoveries.includes(discovery.id),
+  ).length;
+  const targetDistance =
+    latestPoint && targetPoint
+      ? haversineDistance(latestPoint, targetPoint)
+      : 0;
+  const targetBearing = bearingBetween(latestPoint, targetPoint);
+  const demoMarkers = useMemo<MapMarker[]>(() => {
+    const goal = demoTrack.points.at(-1);
+    const markers: MapMarker[] = goal
+      ? [
+          {
+            accessibilityLabel: "Open route target",
+            id: "route-goal",
+            point: goal,
+            variant: "goal",
+          },
+        ]
+      : [];
+    for (const discovery of demoRoute.discoveries) {
+      if (replayProgress < discovery.progress) continue;
+      const index = Math.round(
+        discovery.progress * (demoTrack.points.length - 1),
+      );
+      const point = demoTrack.points[index];
+      if (!point) continue;
+      markers.push({
+        accessibilityLabel: `Open discovery: ${discovery.title}`,
+        id: discovery.id,
+        point,
+        variant: resolvedDiscoveries.includes(discovery.id)
+          ? "complete"
+          : discovery.kind,
+      });
+    }
+    return markers;
+  }, [demoRoute, demoTrack, replayProgress, resolvedDiscoveries]);
 
   const restartReplay = () => {
     setMode("demo");
     setReplayProgress(0);
     setPlaying(true);
+    setTriggeredDiscoveries((current) =>
+      current.filter(
+        (id) => !demoRoute.discoveries.some((discovery) => discovery.id === id),
+      ),
+    );
+    setDemoNotice(
+      "TARGET LOCKED / Explore the line before opening the objective.",
+    );
     setResetKey((current) => current + 1);
   };
 
   const toggleReplay = () => {
-    if (replayProgress >= 1) setReplayProgress(0);
+    if (replayProgress >= 1) {
+      setReplayProgress(0);
+      setTriggeredDiscoveries((current) =>
+        current.filter(
+          (id) =>
+            !demoRoute.discoveries.some((discovery) => discovery.id === id),
+        ),
+      );
+    }
+    setDemoNotice(
+      replayProgress >= 1
+        ? "TARGET LOCKED / A new replay has started."
+        : playing
+          ? "SCAN PAUSED / Inspect any revealed signals."
+          : "SCAN ACTIVE / Moving toward the target.",
+    );
     setPlaying((current) => !current || replayProgress >= 1);
+  };
+
+  const changeDemoRoute = (direction: -1 | 1) => {
+    setMode("demo");
+    setRouteIndex(
+      (current) =>
+        (current + direction + demoRoutes.length) % demoRoutes.length,
+    );
+    setReplayProgress(0);
+    setPlaying(true);
+    setDemoNotice("TARGET LOCKED / New public trace loaded.");
+    setResetKey((current) => current + 1);
+  };
+
+  const openDemoMarker = (id: string) => {
+    if (id === "route-goal") {
+      setDemoNotice(
+        replayProgress >= 1
+          ? "ROUTE COMPLETE / The ! target advances the main path."
+          : `MAIN TARGET / ${formatDistance(targetDistance)} remain. Optional signals may be nearby.`,
+      );
+      return;
+    }
+    const discovery = demoRoute.discoveries.find(
+      (candidate) => candidate.id === id,
+    );
+    if (!discovery) return;
+    setResolvedDiscoveries((current) =>
+      current.includes(id) ? current : [...current, id],
+    );
+    setDemoNotice(`MEMORY ADDED / ${discovery.title}: ${discovery.detail}`);
   };
 
   const importGPX = async () => {
@@ -217,15 +358,16 @@ export function MappieScreen() {
       <View style={styles.mapArea}>
         <MapCanvas
           fitTracks={mode === "demo" ? [demoTrack] : undefined}
-          frontierVisible={mode === "demo" && replayProgress >= 1}
+          markers={mode === "demo" ? demoMarkers : undefined}
+          onMarkerPress={mode === "demo" ? openDemoMarker : undefined}
           resetKey={resetKey}
           tracks={displayedTracks}
           zoomCommand={zoomCommand}
         />
-        <View pointerEvents="none" style={styles.mapHud}>
+        <View style={styles.mapHud}>
           <Text style={styles.hudLabel}>
             {mode === "demo"
-              ? "OPENSTREETMAP / WALK"
+              ? `(c) OPENSTREETMAP CONTRIBUTORS / ${demoRoute.activity} / ${String(routeIndex + 1).padStart(2, "0")} OF ${String(demoRoutes.length).padStart(2, "0")}`
               : recording
                 ? "LIVE SURVEY"
                 : "LOCAL ARCHIVE"}
@@ -238,6 +380,21 @@ export function MappieScreen() {
                 "NO RECORDED SECTOR")}
           </Text>
         </View>
+        {mode === "demo" ? (
+          <View style={styles.targetCompass}>
+            <View style={styles.compassDial}>
+              <View style={{ transform: [{ rotate: `${targetBearing}deg` }] }}>
+                <ArrowUp color={colors.warning} size={18} strokeWidth={2.5} />
+              </View>
+            </View>
+            <View>
+              <Text style={styles.compassLabel}>TARGET !</Text>
+              <Text style={styles.compassValue}>
+                {formatDistance(targetDistance)}
+              </Text>
+            </View>
+          </View>
+        ) : null}
         <View style={styles.mapTools}>
           <IconButton
             accessibilityLabel="Zoom in"
@@ -255,7 +412,7 @@ export function MappieScreen() {
             onPress={() => setResetKey((current) => current + 1)}
           />
         </View>
-        <View pointerEvents="none" style={styles.coordinateHud}>
+        <View style={styles.coordinateHud}>
           <Text style={styles.coordinateText}>
             {readout(latestPoint?.latitude, "N", "S")}
           </Text>
@@ -263,14 +420,20 @@ export function MappieScreen() {
             {readout(latestPoint?.longitude, "E", "W")}
           </Text>
         </View>
-        {message ? (
-          <View pointerEvents="none" style={styles.messageBand}>
+        {mode === "demo" || message ? (
+          <View style={styles.messageBand}>
             <Radio
-              color={recording ? colors.warning : colors.accent}
+              color={
+                mode === "demo"
+                  ? colors.warning
+                  : recording
+                    ? colors.warning
+                    : colors.accent
+              }
               size={14}
             />
             <Text numberOfLines={2} style={styles.messageText}>
-              {message}
+              {mode === "demo" ? demoNotice : message}
             </Text>
           </View>
         ) : null}
@@ -279,11 +442,26 @@ export function MappieScreen() {
       <View style={styles.telemetry}>
         <Metric label="CHARTED" value={formatDistance(distance)} />
         <Metric label="FIXES" value={String(points.length).padStart(3, "0")} />
-        <Metric label="SESSIONS" value={String(trackCount).padStart(2, "0")} />
+        <Metric
+          label={mode === "demo" ? "MEMORY" : "SESSIONS"}
+          value={
+            mode === "demo"
+              ? `${routeMemoryCount}/${demoRoute.discoveries.length}`
+              : String(trackCount).padStart(2, "0")
+          }
+        />
         <Metric
           label="STATE"
           value={
-            recording ? "LIVE" : mode === "demo" && playing ? "SCAN" : "IDLE"
+            recording
+              ? "LIVE"
+              : mode === "demo"
+                ? replayProgress >= 1
+                  ? "CLEAR"
+                  : playing
+                    ? "SCAN"
+                    : "FOUND"
+                : "IDLE"
           }
           warning={recording}
         />
@@ -291,27 +469,59 @@ export function MappieScreen() {
 
       <View style={[styles.commandBar, compact && styles.commandBarCompact]}>
         {mode === "demo" ? (
-          <>
-            <IconButton
-              accessibilityLabel={
-                playing
-                  ? "Pause public trace replay"
-                  : "Play public trace replay"
-              }
-              icon={playing ? Pause : Play}
-              label={playing ? "PAUSE" : "REPLAY"}
-              onPress={toggleReplay}
-              tone="primary"
-            />
-            <IconButton
-              accessibilityLabel="Restart public trace replay"
-              icon={RotateCcw}
-              onPress={restartReplay}
-            />
-            <Text numberOfLines={2} style={styles.sourceText}>
-              OSM TRACE 11982156{compact ? "\n" : " / "}33 PUBLIC FIXES
-            </Text>
-          </>
+          <View
+            style={[styles.demoCommands, compact && styles.demoCommandsCompact]}
+          >
+            <View style={styles.routePicker}>
+              <IconButton
+                accessibilityLabel="Previous public trace"
+                icon={ChevronLeft}
+                onPress={() => changeDemoRoute(-1)}
+              />
+              <Pressable
+                accessibilityLabel={`Open OpenStreetMap trace ${demoRoute.traceId}`}
+                accessibilityRole="link"
+                onPress={() => void Linking.openURL(demoRoute.sourceUrl)}
+                style={({ pressed }) => [
+                  styles.routeCopy,
+                  pressed && styles.routeCopyPressed,
+                ]}
+              >
+                <Text numberOfLines={1} style={styles.routeName}>
+                  {String(routeIndex + 1).padStart(2, "0")} /{" "}
+                  {String(demoRoutes.length).padStart(2, "0")}{" "}
+                  {demoTrack.name.toUpperCase()}
+                </Text>
+                <Text numberOfLines={1} style={styles.sourceText}>
+                  OSM TRACE {demoRoute.traceId} / {demoRoute.originalPointCount}{" "}
+                  PUBLIC FIXES
+                </Text>
+              </Pressable>
+              <IconButton
+                accessibilityLabel="Next public trace"
+                icon={ChevronRight}
+                onPress={() => changeDemoRoute(1)}
+              />
+            </View>
+            <View style={styles.playbackTools}>
+              <IconButton
+                accessibilityLabel={
+                  playing
+                    ? "Pause public trace replay"
+                    : "Play public trace replay"
+                }
+                icon={playing ? Pause : Play}
+                label={playing ? "PAUSE" : "CONTINUE"}
+                onPress={toggleReplay}
+                tone="primary"
+              />
+              <IconButton
+                accessibilityLabel="Restart public trace replay"
+                icon={RotateCcw}
+                onPress={restartReplay}
+              />
+            </View>
+          </View>
         ) : (
           <>
             <IconButton
@@ -439,11 +649,35 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   commandBarCompact: {
+    flexWrap: "wrap",
     minHeight: 64,
+  },
+  compassDial: {
+    alignItems: "center",
+    borderColor: colors.warning,
+    borderRadius: 18,
+    borderWidth: 1,
+    height: 36,
+    justifyContent: "center",
+    width: 36,
+  },
+  compassLabel: {
+    color: colors.warning,
+    fontFamily: "monospace",
+    fontSize: 8,
+    fontWeight: "700",
+  },
+  compassValue: {
+    color: colors.text,
+    fontFamily: "monospace",
+    fontSize: 11,
+    fontWeight: "700",
+    marginTop: 2,
   },
   coordinateHud: {
     bottom: 12,
     left: 13,
+    pointerEvents: "none",
     position: "absolute",
   },
   coordinateText: {
@@ -467,6 +701,16 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     flexDirection: "column",
     gap: 10,
+  },
+  demoCommands: {
+    alignItems: "center",
+    flex: 1,
+    flexDirection: "row",
+    gap: 10,
+  },
+  demoCommandsCompact: {
+    alignItems: "stretch",
+    flexDirection: "column",
   },
   hudLabel: {
     color: colors.accent,
@@ -499,6 +743,7 @@ const styles = StyleSheet.create({
   },
   mapHud: {
     left: 14,
+    pointerEvents: "none",
     position: "absolute",
     top: 13,
   },
@@ -520,6 +765,7 @@ const styles = StyleSheet.create({
     maxWidth: 300,
     paddingHorizontal: 10,
     paddingVertical: 8,
+    pointerEvents: "none",
     position: "absolute",
     top: 57,
   },
@@ -528,6 +774,10 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     fontFamily: "monospace",
     fontSize: 10,
+  },
+  playbackTools: {
+    flexDirection: "row",
+    gap: 8,
   },
   metric: {
     borderRightColor: colors.line,
@@ -577,6 +827,29 @@ const styles = StyleSheet.create({
     backgroundColor: colors.panel,
     flex: 1,
   },
+  routeCopy: {
+    flex: 1,
+    justifyContent: "center",
+    minHeight: 44,
+    minWidth: 0,
+    paddingHorizontal: 2,
+  },
+  routeCopyPressed: {
+    opacity: 0.65,
+  },
+  routeName: {
+    color: colors.text,
+    fontFamily: "monospace",
+    fontSize: 10,
+    fontWeight: "700",
+  },
+  routePicker: {
+    alignItems: "center",
+    flex: 1,
+    flexDirection: "row",
+    gap: 8,
+    minWidth: 0,
+  },
   segmentedControl: {
     borderColor: colors.line,
     borderRadius: 5,
@@ -586,11 +859,19 @@ const styles = StyleSheet.create({
   },
   sourceText: {
     color: colors.muted,
-    flex: 1,
     fontFamily: "monospace",
-    fontSize: 9,
-    lineHeight: 13,
-    textAlign: "right",
+    fontSize: 8,
+    lineHeight: 12,
+    marginTop: 2,
+  },
+  targetCompass: {
+    alignItems: "center",
+    bottom: 42,
+    flexDirection: "row",
+    gap: 8,
+    left: 13,
+    pointerEvents: "none",
+    position: "absolute",
   },
   telemetry: {
     backgroundColor: colors.panelRaised,

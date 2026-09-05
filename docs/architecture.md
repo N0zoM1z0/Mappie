@@ -43,6 +43,10 @@ The exploration lifecycle. It hydrates saved data, resumes a background session,
 
 The code-native cartography surface and controls. `MapCanvas` receives tracks rather than a map-provider object. It therefore cannot accidentally reveal roads that the user has not explored.
 
+`src/data`
+
+The isolated public replay gallery. Each route binds an attributed OSM fixture to fictional proximity markers used to exercise `?`, person, `!`, and Memory states without claiming real-world POIs. Demo discoveries are session-only and are never written into the private archive.
+
 ## Track schema
 
 ```ts

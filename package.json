@@ -33,6 +33,7 @@
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
+    "fixtures:refresh": "node scripts/import-public-traces.mjs",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",

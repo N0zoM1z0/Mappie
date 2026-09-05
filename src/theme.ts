@@ -4,6 +4,7 @@ export const colors = {
   danger: "#FF8A8A",
   dangerLine: "#713D42",
   dangerSurface: "#261719",
+  friend: "#78BFE8",
   grid: "#12271F",
   gridStrong: "#28513F",
   ink: "#07110E",
@@ -11,6 +12,7 @@ export const colors = {
   muted: "#8CA398",
   panel: "#0C1914",
   panelRaised: "#12221B",
+  signal: "#F08FAA",
   text: "#E8F3ED",
   warning: "#F3C969",
 } as const;
