@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { pointsToPath, projectTracks } from "../src/core/projection";
+import {
+  fitTrackViewport,
+  pointsToPath,
+  projectTracks,
+  projectTracksToViewport,
+} from "../src/core/projection";
 import { demoSessions, demoTrack } from "../src/data/demoTrack";
 
 describe("blank-map projection", () => {
@@ -20,6 +25,15 @@ describe("blank-map projection", () => {
         { x: 3.5, y: 4 },
       ]),
     ).toBe("M 1.00 2.00 L 3.50 4.00");
+  });
+
+  it("reuses a fitted viewport without changing projected geometry", () => {
+    const fitTracks = demoSessions.slice(0, 3).map((session) => session.track);
+    const viewport = fitTrackViewport(fitTracks, 390, 600, 30);
+
+    expect(projectTracksToViewport([demoTrack], viewport)).toEqual(
+      projectTracks([demoTrack], 390, 600, 30, fitTracks),
+    );
   });
 
   it("fits every public fixture at a phone-sized viewport", () => {

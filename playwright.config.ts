@@ -17,6 +17,13 @@ export default defineConfig({
       },
     },
     {
+      name: "desktop-firefox",
+      use: {
+        ...devices["Desktop Firefox"],
+        viewport: { width: 1280, height: 800 },
+      },
+    },
+    {
       name: "iphone-viewport",
       use: { ...devices["iPhone 13"], browserName: "chromium" },
     },

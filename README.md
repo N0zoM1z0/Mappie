@@ -31,7 +31,7 @@ The premise is inspired by the fictional GPS tool named Mappie in the visual nov
 - Local-only archive and interrupted-session recovery
 - Accuracy, speed, movement, and timestamp filtering
 - Distance, location-fix, session, and live-state telemetry
-- Responsive layouts tested at desktop and iPhone dimensions
+- Responsive layouts tested in desktop Chromium, desktop Firefox, and at iPhone dimensions
 
 The public replay makes the central loop testable without a physical phone. Step through repeated Cambridge sessions to watch overlap consolidate and new branches extend the map, then switch to `MY MAP` for imported or recorded paths. Personal routes never mix with the bundled demo archive.
 
@@ -72,7 +72,7 @@ npm run test:e2e
 npx expo export --platform web
 ```
 
-The unit suite covers GPX parsing, GPS rejection rules, distance measurement, time-gap segmentation, viewport projection, graph reconstruction, and the public session registry. The Playwright suite boots the real web bundle at desktop and iPhone dimensions, advances the reconstruction, switches between merged and raw geometry, checks horizontal overflow, and exercises the personal-map mode.
+The unit suite covers GPX parsing, GPS rejection rules, distance measurement, time-gap segmentation, viewport projection, graph reconstruction, and the public session registry. The Playwright suite boots the real web bundle in Chromium and Firefox, advances beyond 30 sessions, enforces a bounded SVG DOM, switches between merged and raw geometry, checks horizontal overflow, and exercises the personal-map mode at desktop and iPhone dimensions.
 
 ## Architecture
 

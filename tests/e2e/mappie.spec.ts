@@ -36,6 +36,20 @@ test("builds one unknown map from repeated public sessions", async ({
     .getByRole("button", { name: "Forward ten exploration sessions" })
     .click();
   await expect(page.getByText(/SESSION 12 \/ 70/)).toBeVisible();
+  await page
+    .getByRole("button", { name: "Forward ten exploration sessions" })
+    .click();
+  await page
+    .getByRole("button", { name: "Forward ten exploration sessions" })
+    .click();
+  await expect(page.getByText(/SESSION 32 \/ 70/)).toBeVisible();
+  await expect(page.getByText("SESSION 32 / SURVEY IN PROGRESS")).toBeVisible();
+  await expect(page.getByText(/SESSION 32 \/ .* REVISITED/)).toBeVisible({
+    timeout: 6_000,
+  });
+
+  const svgElementCount = await page.locator("svg *").count();
+  expect(svgElementCount).toBeLessThan(150);
 
   const overflow = await page.evaluate(
     () =>

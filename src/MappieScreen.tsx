@@ -118,6 +118,7 @@ export function MappieScreen() {
   const demoSession = demoSessions[sessionIndex]!;
   const replayFrameCount = sessionIndex < 10 ? 50 : sessionIndex < 30 ? 25 : 12;
   const replayFrame = Math.floor(replayProgress * replayFrameCount);
+  const replayComplete = replayFrame >= replayFrameCount;
   const visibleDemoTracks = useMemo(() => {
     const previous = demoSessions
       .slice(0, sessionIndex)
@@ -145,8 +146,11 @@ export function MappieScreen() {
     [activeTrack, tracks],
   );
   const demoMap = useMemo(
-    () => reconstructMap(visibleDemoTracks),
-    [visibleDemoTracks],
+    () =>
+      reconstructMap(
+        allDemoTracks.slice(0, sessionIndex + (replayComplete ? 1 : 0)),
+      ),
+    [allDemoTracks, replayComplete, sessionIndex],
   );
   const personalMap = useMemo(
     () => reconstructMap(personalTracks),
@@ -158,16 +162,46 @@ export function MappieScreen() {
     () =>
       reconstructionTracks(
         reconstruction,
-        mode === "demo" ? sessionIndex + 1 : personalTracks.length,
+        mode === "demo"
+          ? reconstruction.sessions.length
+          : personalTracks.length,
       ),
-    [mode, personalTracks.length, reconstruction, sessionIndex],
+    [mode, personalTracks.length, reconstruction, replayComplete, sessionIndex],
   );
-  const displayedTracks = layer === "map" ? networkTracks : rawTracks;
-  const lineTones =
-    layer === "map"
-      ? edgeTones(reconstruction, mode === "demo" ? sessionIndex : undefined)
-      : rawTones(rawTracks, rawTracks.at(-1)?.id);
-  const currentContribution = reconstruction.sessions.at(-1);
+  const displayedTracks = useMemo(
+    () =>
+      layer === "map"
+        ? mode === "demo" && !replayComplete
+          ? [...networkTracks, visibleDemoTracks.at(-1)!]
+          : networkTracks
+        : rawTracks,
+    [layer, mode, networkTracks, rawTracks, replayComplete, visibleDemoTracks],
+  );
+  const mapLineTones = useMemo(() => {
+    const tones = edgeTones(
+      reconstruction,
+      mode === "demo" && replayComplete ? sessionIndex : undefined,
+    );
+    if (mode === "demo" && !replayComplete) {
+      tones[demoSession.track.id] = "current";
+    }
+    return tones;
+  }, [
+    demoSession.track.id,
+    mode,
+    reconstruction,
+    replayComplete,
+    sessionIndex,
+  ]);
+  const rawLineTones = useMemo(
+    () => rawTones(rawTracks, rawTracks.at(-1)?.id),
+    [rawTracks],
+  );
+  const lineTones = layer === "map" ? mapLineTones : rawLineTones;
+  const currentContribution =
+    mode === "demo" && !replayComplete
+      ? undefined
+      : reconstruction.sessions.at(-1);
   const contributionDistance =
     (currentContribution?.newDistanceMeters ?? 0) +
     (currentContribution?.revisitedDistanceMeters ?? 0);
@@ -185,10 +219,12 @@ export function MappieScreen() {
   useEffect(() => {
     if (!playing || mode !== "demo") return;
     const timer = setInterval(() => {
-      setReplayProgress((current) => Math.min(1, current + 0.008));
-    }, 32);
+      setReplayProgress((current) =>
+        Math.min(1, current + 1 / replayFrameCount),
+      );
+    }, 4_000 / replayFrameCount);
     return () => clearInterval(timer);
-  }, [mode, playing]);
+  }, [mode, playing, replayFrameCount]);
 
   useEffect(() => {
     if (replayProgress < 1) return;
@@ -283,7 +319,9 @@ export function MappieScreen() {
 
   const statusText =
     mode === "demo"
-      ? `SESSION ${String(sessionIndex + 1).padStart(2, "0")} / ${formatDistance(currentContribution?.newDistanceMeters ?? 0)} NEW / ${formatDistance(currentContribution?.revisitedDistanceMeters ?? 0)} REVISITED`
+      ? replayComplete
+        ? `SESSION ${String(sessionIndex + 1).padStart(2, "0")} / ${formatDistance(currentContribution?.newDistanceMeters ?? 0)} NEW / ${formatDistance(currentContribution?.revisitedDistanceMeters ?? 0)} REVISITED`
+        : `SESSION ${String(sessionIndex + 1).padStart(2, "0")} / SURVEY IN PROGRESS`
       : message;
 
   return (

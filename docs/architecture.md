@@ -113,3 +113,9 @@ inferred_edges(edge_id, from_node, to_node, first_seen, last_seen, visit_count)
 ```
 
 Rendering can then depend on `inferred_edges`, while users may choose to delete precise raw observations. The current in-memory graph is rebuilt deterministically and is not yet persisted.
+
+On screen, edges with the same visual state are concatenated into one compound
+SVG path instead of creating one React/SVG node per inferred edge. The demo also
+caches its fixed projection viewport and keeps the completed network static
+while replaying the current raw survey. Reconstruction runs once when a session
+is selected and the new edges are committed when its replay completes.

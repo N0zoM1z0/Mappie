@@ -42,8 +42,8 @@ jobs:
       - name: Export web production bundle
         run: npx expo export --platform web
 
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install browsers
+        run: npx playwright install --with-deps chromium firefox
 
       - name: Run responsive end-to-end tests
         run: npm run test:e2e

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import {
   PanResponder,
   type GestureResponderEvent,
@@ -11,11 +11,23 @@ import {
 import Svg, { Circle, G, Line, Path, Rect } from "react-native-svg";
 
 import { splitTrackAtGaps } from "../core/geo";
-import { pointsToPath, projectTracks } from "../core/projection";
+import {
+  fitTrackViewport,
+  pointsToPath,
+  projectTracksToViewport,
+} from "../core/projection";
 import type { Track } from "../core/types";
 import { colors } from "../theme";
 
 export type MapLineTone = "confirmed" | "current" | "new" | "observed" | "raw";
+
+const DRAW_ORDER: MapLineTone[] = [
+  "raw",
+  "observed",
+  "confirmed",
+  "new",
+  "current",
+];
 
 interface MapCanvasProps {
   fitTracks?: Track[];
@@ -39,7 +51,7 @@ function touchDistance(event: GestureResponderEvent): number | null {
   return Math.hypot(second.pageX - first.pageX, second.pageY - first.pageY);
 }
 
-export function MapCanvas({
+export const MapCanvas = memo(function MapCanvas({
   fitTracks,
   lineTones = {},
   resetKey,
@@ -99,29 +111,48 @@ export function MapCanvas({
       ),
     [tracks],
   );
+  const projectionFitTracks = fitTracks ?? tracks;
   const segmentedFitTracks = useMemo(
     () =>
-      (fitTracks ?? tracks).flatMap((track) =>
+      projectionFitTracks.flatMap((track) =>
         splitTrackAtGaps(track.points).map((points, index) => ({
           ...track,
           id: `${track.id}-fit-${index}`,
           points,
         })),
       ),
-    [fitTracks, tracks],
+    [projectionFitTracks],
   );
-  const projection = useMemo(
+  const viewport = useMemo(
     () =>
-      projectTracks(
-        segmentedTracks,
+      fitTrackViewport(
+        segmentedFitTracks,
         size.width,
         size.height,
         Math.min(52, size.width * 0.14),
-        segmentedFitTracks,
       ),
-    [segmentedFitTracks, segmentedTracks, size.height, size.width],
+    [segmentedFitTracks, size.height, size.width],
+  );
+  const projection = useMemo(
+    () => projectTracksToViewport(segmentedTracks, viewport),
+    [segmentedTracks, viewport],
   );
   const projectedTracks = projection.tracks;
+  const pathLayers = useMemo(() => {
+    const paths = new Map<MapLineTone, string[]>();
+    for (const track of projectedTracks) {
+      if (track.points.length < 2) continue;
+      const originalId = track.id.replace(/-\d+$/, "");
+      const tone = lineTones[originalId] ?? "confirmed";
+      const tonePaths = paths.get(tone) ?? [];
+      tonePaths.push(pointsToPath(track.points));
+      paths.set(tone, tonePaths);
+    }
+    return DRAW_ORDER.flatMap((tone) => {
+      const tonePaths = paths.get(tone);
+      return tonePaths ? [{ d: tonePaths.join(" "), tone }] : [];
+    });
+  }, [lineTones, projectedTracks]);
 
   const panResponder = useMemo(
     () =>
@@ -234,10 +265,7 @@ export function MapCanvas({
           <G
             transform={`translate(${transform.x} ${transform.y}) scale(${transform.scale})`}
           >
-            {projectedTracks.map((track) => {
-              const path = pointsToPath(track.points);
-              const originalId = track.id.replace(/-\d+$/, "");
-              const tone = lineTones[originalId] ?? "confirmed";
+            {pathLayers.map(({ d, tone }) => {
               const stroke =
                 tone === "new"
                   ? colors.warning
@@ -259,49 +287,47 @@ export function MapCanvas({
               const opacity =
                 tone === "raw" ? 0.34 : tone === "observed" ? 0.66 : 1;
               return (
-                <G key={track.id}>
-                  {track.points.length > 1 ? (
-                    <>
-                      {tone === "new" || tone === "current" ? (
-                        <Path
-                          d={path}
-                          fill="none"
-                          opacity={tone === "current" ? 0.1 : 0.18}
-                          stroke={stroke}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={(strokeWidth + 6) / transform.scale}
-                        />
-                      ) : null}
-                      <Path
-                        d={path}
-                        fill="none"
-                        opacity={opacity}
-                        stroke={stroke}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={strokeWidth / transform.scale}
-                      />
-                    </>
+                <G key={tone}>
+                  {tone === "new" || tone === "current" ? (
+                    <Path
+                      d={d}
+                      fill="none"
+                      opacity={tone === "current" ? 0.1 : 0.18}
+                      stroke={stroke}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={(strokeWidth + 6) / transform.scale}
+                    />
                   ) : null}
-                  {showNodes
-                    ? track.points
-                        .filter((_, index) => index % 5 === 0)
-                        .map((point, index) => (
-                          <Circle
-                            cx={point.x}
-                            cy={point.y}
-                            fill={colors.ink}
-                            key={`${track.id}-node-${index}`}
-                            r={2.6 / transform.scale}
-                            stroke={stroke}
-                            strokeWidth={1.5 / transform.scale}
-                          />
-                        ))
-                    : null}
+                  <Path
+                    d={d}
+                    fill="none"
+                    opacity={opacity}
+                    stroke={stroke}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={strokeWidth / transform.scale}
+                  />
                 </G>
               );
             })}
+            {showNodes
+              ? projectedTracks.flatMap((track) =>
+                  track.points
+                    .filter((_, index) => index % 5 === 0)
+                    .map((point, index) => (
+                      <Circle
+                        cx={point.x}
+                        cy={point.y}
+                        fill={colors.ink}
+                        key={`${track.id}-node-${index}`}
+                        r={2.6 / transform.scale}
+                        stroke={colors.accent}
+                        strokeWidth={1.5 / transform.scale}
+                      />
+                    )),
+                )
+              : null}
             {showPosition && finalPoint ? (
               <>
                 <Circle
@@ -342,7 +368,7 @@ export function MapCanvas({
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   canvas: {
