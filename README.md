@@ -8,21 +8,21 @@
 
 [Open the live web app](https://mappie-c70.pages.dev)
 
-Mappie is an open-source personal cartography experiment. Instead of showing a complete map and drawing a workout on top, it starts with an empty field and renders only the paths that have entered your own history.
+When I first played _Rewrite_, Mappie was one of those small ideas that stayed with me: a map that begins completely empty and comes into focus only because you actually went somewhere. I kept thinking it would be fun to make a real version someday, so this is that little project.
 
-> **We are not recreating the Mappie minigame from _Rewrite_. We are implementing the fictional software at the center of its premise: personally walking through an unknown place and building its map from zero.**
+This Mappie is a personal cartography experiment built around the same feeling. You begin with a blank field. Each walk reveals a little more of the place around you: familiar paths line up, noisy GPS traces settle into shared routes, and a turn into somewhere new becomes another branch. Walk through the same area often enough and a rough, personal map slowly appears.
 
-There is no story, quest, `?`, or `!` layer in the real-world product. Its core loop is repeated observation: each walk should merge with paths already seen despite ordinary GPS drift, extend the known network where it enters new ground, and gradually turn rough traces into a stable map.
+It is a simple open-source project made for the pleasure of watching familiar places emerge one walk at a time.
 
 <p align="center">
   <img src="docs/mappie-mobile.png" width="390" alt="Mappie reconstructing Cambridge from repeated public GPS sessions">
 </p>
 
-The premise is inspired by the fictional GPS tool named Mappie in the visual novel _Rewrite_. This project is independent and is not affiliated with or endorsed by Key or Visual Arts. It contains no assets from the game.
+The name and original premise come from the fictional GPS tool in the visual novel _Rewrite_ by Key.
 
 ## What works
 
-- A blank, pan-and-zoom vector canvas with no commercial basemap
+- A blank, pan-and-zoom vector canvas drawn entirely from explored routes
 - Progressive reconstruction from repeated, partially overlapping GPS sessions in one neighborhood
 - Raw-observation and merged-map views for inspecting GPS drift and edge confidence
 - GPX 1.1 track and route import
